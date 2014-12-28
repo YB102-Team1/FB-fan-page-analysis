@@ -1,0 +1,12 @@
+#system-message {
+    background-color: #D33;
+    color: white;
+    opacity: 0.8;
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    margin-top: 0;
+    top: 0;
+    padding: 10px 0;
+    display: none;
+}

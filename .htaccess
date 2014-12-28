@@ -1,0 +1,26 @@
+# Samas RewriteRule
+
+allow from all
+
+<Files ~ "^\.(htaccess)$">
+deny from all
+</Files>
+
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine On
+    RewriteBase /
+
+    RedirectMatch permanent ^/_class/.*$ /index.php
+    RedirectMatch permanent ^/_config/.*$ /index.php
+    RedirectMatch permanent ^/_layout/.*$ /index.php
+    RedirectMatch permanent ^/_view/.*$ /index.php
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [QSA,NC,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /index.php
+</IfModule>
