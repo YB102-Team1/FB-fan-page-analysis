@@ -136,8 +136,7 @@ class ModelHelper {
 
     public static function createSQLFile($table_name) {
 
-        $class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name)));
-        $sql_path = ASSET_ROOT.'/sql/'.$class_name.'.sql';
+        $sql_path = ASSET_ROOT.'/sql/'.$table_name.'.sql';
 
         if (!file_exists($sql_path)) {
 
