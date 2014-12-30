@@ -8,18 +8,18 @@ class ResponseMessenger {
             $code = 0;
             $status_text = 'success';
 
-        } else {//end if ($status == 'success')
+        } else {// end if ($status == 'success')
 
             $code = 1;
             $status_text = 'fail';
 
-        }//end if ($status == 'success') else
+        }// end if ($status == 'success') else
 
         if (empty($message)) {
 
             $message = $status_text;
 
-        }//end if (empty($message))
+        }// end if (empty($message))
 
         $return_array = array(
             "status"=>array(
@@ -30,9 +30,9 @@ class ResponseMessenger {
             "parameter"=>$parameter
         );
 
-        return json_encode($return_array);
+        print_r(json_encode($return_array));
 
     }// end function json
 
-}//end class ResponseMessenger
+}// end class ResponseMessenger
 ?>

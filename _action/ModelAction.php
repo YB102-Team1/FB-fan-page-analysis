@@ -24,7 +24,7 @@ class ModelAction {
                     $column_array[$key] = $value;
                     break;
 
-                }//end switch ($key)
+                }// end switch ($key)
 
             }// end foreach ($_POST as $key => $value)
 
@@ -34,13 +34,44 @@ class ModelAction {
 
             if ($create_table && $create_class && $create_class_god) {
 
-                return ResponseMessenger::json('success');
+                ResponseMessenger::json('success');
 
             } else {// end if ($create_table && $create_class && $create_class_god)
 
-                return ResponseMessenger::json('fail');
+                ResponseMessenger::json('fail');
 
-            }//end if ($create_table && $create_class && $create_class_god) else
+            }// end if ($create_table && $create_class && $create_class_god) else
+
+            break;
+
+        case 'export-table':
+
+            $table_list = $_POST['table_list'];
+            $table_array = explode(',', $table_list);
+            $success_table_array = array();
+            $fail_table_array = array();
+
+            foreach ($table_array as $table_name) {
+
+                if (ModelHelper::createSQLFile($table_name)) {
+
+                    array_push($success_table_array, $table_name);
+
+                } else {// end if (ModelHelper::createSQLFile($table_name))
+
+                    array_push($fail_table_array, $table_name);
+
+                }// end if (ModelHelper::createSQLFile($table_name)) else
+
+            }// end foreach ($table_array as $table_name)
+
+            $message = '成功建立 '.count($success_table_array).' 個 SQL 檔案';
+            $parameter = array(
+                "success"=>implode(', ', $success_table_array),
+                "fail"=>implode(', ', $fail_table_array)
+            );
+
+            ResponseMessenger::json('success', $message, $parameter);
 
             break;
 

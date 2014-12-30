@@ -31,6 +31,43 @@ class DatabaseAccess {
 
    }// end function getAllTables
 
+   public function getTableColumns($table_name) {
+
+      $sql = "SHOW COLUMNS FROM $table_name";
+      $query_instance = $this->link->query($sql);
+      $column_array = array();
+
+      foreach ($query_instance as $instance_data) {
+
+         $column_name = $instance_data['Field'];
+         switch ($column_name) {
+
+         case 'id':
+         case 'is_deleted':
+         case 'create_time':
+         case 'modify_time':
+         case 'delete_time':
+            break;
+
+         default:
+            $type = $instance_data['Type'];
+            $default_value = "";
+            if ($instance_data['Default'] != NULL) {
+
+               $default_value = " DEFAULT '".$instance_data['Default']."'";
+
+            }// end if ($instance_data['Default'] != NULL)
+            $column_array[$column_name] = "$type NOT NULL".$default_value;
+            break;
+
+         }// switch ($column_name)
+
+      }// end foreach ($query_instance as $instance_data)
+
+      return $column_array;
+
+   }// end function getTableColumns
+
    public function insert($sql) {
 
       $query = $this->link->query($sql);
@@ -38,7 +75,7 @@ class DatabaseAccess {
 
          return array("error" => $this->link->error);
 
-      } else { // end if (!$query)
+      } else {// end if (!$query)
 
          return $this->link->insert_id;
 

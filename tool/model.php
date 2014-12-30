@@ -25,7 +25,7 @@ include $_SERVER['DOCUMENT_ROOT'].'/_config/system_config.inc';
         }
         </style>
 
-        <title>Model Build Page</title>
+        <title>Create Model Page</title>
     </head>
     <body>
         <h1 id="system-message"></h1>
@@ -301,29 +301,41 @@ $(document).ready(function() {
 
         }
 
+        if (validate) {
+
+            $('#system-message').html('處理中');
+            $('#system-message').show();
+
+        }
+
         return validate;
 
     }
 
     function createModelResponse(response, statusText, xhr, $form) {
 
-        if (response.code == 0) {
+        if (response.status.code == 0) {
 
             $('#system-message').html('成功');
+            $('#system-message').fadeOut(3000);
 
         } else {
 
+            $('#system-message').html('失敗');
+            $('#system-message').fadeOut(3000);
 
         }
 
     }
 
     $('#create-model-form').ajaxForm({
-        beforeSubmit:  createModelValidate,
-        success:       createModelResponse,
+
+        beforeSubmit: createModelValidate,
+        success:      createModelResponse,
         url: '/action/model/create-model',
         type: 'post',
         dataType: 'json'
+
     });
 
 });

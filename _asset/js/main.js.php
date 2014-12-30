@@ -17,7 +17,7 @@ $(window).load(function() {
             })
             .on('pjax:error', function(e, xhr, err) {
 
-                $('#system-message').text('Something went wrong: ' + err);
+                $('#system-message').html('Something went wrong: ' + err);
                 $('#system-message').show();
 
             })

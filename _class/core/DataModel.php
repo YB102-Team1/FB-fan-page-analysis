@@ -61,7 +61,7 @@ abstract class DataModel {
 
                 }// end foreach ($instance_data as $property_key => $property_value)
 
-            }//end foreach ($query_instance as $instance_data)
+            }// end foreach ($query_instance as $instance_data)
 
         }// end if (empty($id)) else
 
