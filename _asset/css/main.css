@@ -10,3 +10,8 @@
     padding: 10px 0;
     display: none;
 }
+
+.error-help {
+    display: none;
+    color: #B94A48;
+}

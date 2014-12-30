@@ -23,19 +23,19 @@ class PJAXHelper {
 
     }// end function getPJAXContainer
 
-    public static function run($page_title, $file_path) {
+    public static function run($page_title, $file_path, $http_param = array()) {
 
         if (self::isPJAX() && self::getPJAXContainer() == '#main-section') {
 
-            echo "<title>$page_title</title>\n";
+            echo "<title>$page_title</title>";
             include VIEW_ROOT.$file_path;
 
-        } else {
+        } else {// end if (self::isPJAX() && self::getPJAXContainer() == '#main-section')
 
             $view_path = VIEW_ROOT.$file_path;
             include LAYOUT_ROOT.'/main-layout.php';
 
-        }
+        }// end if (self::isPJAX() && self::getPJAXContainer() == '#main-section') else
 
     }// end function run
 
