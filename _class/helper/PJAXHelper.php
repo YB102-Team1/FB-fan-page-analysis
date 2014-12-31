@@ -33,7 +33,15 @@ class PJAXHelper {
         } else {// end if (self::isPJAX() && self::getPJAXContainer() == '#main-section')
 
             $view_path = VIEW_ROOT.$file_path;
-            include LAYOUT_ROOT.'/main-layout.php';
+            if (!file_exists($view_path)) {
+
+                echo 'View file missing';
+
+            } else {// end if (file_exists($view_path))
+
+                include LAYOUT_ROOT.'/main-layout.php';
+
+            }// end if (file_exists($view_path)) else
 
         }// end if (self::isPJAX() && self::getPJAXContainer() == '#main-section') else
 

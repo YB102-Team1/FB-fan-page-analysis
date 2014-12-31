@@ -16,7 +16,8 @@
         <title><?php echo $page_title; ?></title>
     </head>
     <body>
-        <h1 id="system-message"></h1>
+        <div id="system-message"></div>
+        <h1>&nbsp;</h1>
         <div id="main-section">
             <?php include $view_path; ?>
         </div>

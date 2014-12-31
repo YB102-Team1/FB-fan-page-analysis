@@ -1,5 +1,5 @@
 <?php
-class ModelAction {
+class ToolAction {
 
     public function post($segments) {
 
@@ -75,6 +75,13 @@ class ModelAction {
 
             break;
 
+        case 'eval-code':
+
+            $code = $_POST['code'];
+            include COMPONENT_ROOT.'/tool/eval-code.php';
+
+            break;
+
         default:
             echo 'Undefined post action';
             break;
@@ -97,5 +104,5 @@ class ModelAction {
 
     }// end function get
 
-}// end class ModelAction
+}// end class ToolAction
 ?>
