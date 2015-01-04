@@ -24,10 +24,10 @@ abstract class DataModelGod {
 
     }// end function getAll
 
-    public function getIdCount() {
+    public function getDataCount() {
 
         $id_count = 0;
-        $sql = "SELECT COUNT(id) id_count FROM $this->table_name";
+        $sql = "SELECT COUNT(id) id_count FROM $this->table_name WHERE is_deleted = 0";
 
         $result = $this->db_obj->select($sql);
 
@@ -39,7 +39,7 @@ abstract class DataModelGod {
 
         return $id_count;
 
-    }// end function getIdCount
+    }// end function getDataCount
 
     public function getMaxId() {
 
@@ -139,8 +139,9 @@ abstract class DataModelGod {
 
         }// end foreach ($class_property_array as $property_key => $property_value)
 
-        $sql .= " create_time) VALUES ($value_list :create_time)";
+        $sql .= " create_time, modify_time) VALUES ($value_list :create_time, :modify_time)";
         $param[':create_time'] = $now;
+        $param[':modify_time'] = $now;
 
         return $this->db_obj->insert($sql, $param);
 

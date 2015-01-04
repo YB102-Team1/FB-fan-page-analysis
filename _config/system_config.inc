@@ -21,6 +21,8 @@ set_exception_handler('exception_handler');
 define(SITE_ROOT, $_SERVER['DOCUMENT_ROOT']);
 define(ACTION_ROOT, SITE_ROOT.'/_action');
 define(ASSET_ROOT, SITE_ROOT.'/_asset');
+define(DATA_SQL_ROOT, SITE_ROOT.'/_asset/sql/data');
+define(TABLE_SQL_ROOT, SITE_ROOT.'/_asset/sql/table');
 define(TEMPLATE_ROOT, SITE_ROOT.'/_asset/template');
 define(CLASS_ROOT, SITE_ROOT.'/_class');
 define(COMPONENT_ROOT, SITE_ROOT.'/_component');
@@ -33,7 +35,7 @@ define(DB_CONFIG_FILE, CONFIG_ROOT.'/database_config.inc');
 define(CLASS_TEMPLATE_FILE, TEMPLATE_ROOT.'/ClassTemplate.php');
 define(CLASS_GOD_TEMPLATE_FILE, TEMPLATE_ROOT.'/ClassGodTemplate.php');
 define(ACTION_TEMPLATE_FILE, TEMPLATE_ROOT.'/ActionTemplate.php');
-define(SQL_TEMPLATE_FILE, TEMPLATE_ROOT.'/SQLTemplate.sql');
+define(TABLE_SQL_TEMPLATE_FILE, TEMPLATE_ROOT.'/TableSQLTemplate.sql');
 define(GLOBAL_VARIABLES_FILE, CONFIG_ROOT.'/global_variables.inc');
 define(CLASS_LOADER_FILE, CONFIG_ROOT.'/class_loader.inc');
 

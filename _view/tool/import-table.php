@@ -1,36 +1,55 @@
 <?php
-include COMPONENT_ROOT.'/navbar/tool-navbar.php';
+SiteHelper::getNavBar('tool', $url);
 ?>
-<form id="export-table-form" class="form-horizontal">
-    <input type="hidden" id="table-list" name="table_list" value="" />
+<form id="import-table-form" class="form-horizontal">
     <div class="control-group">
-        <label class="control-label" for="table-name">Localhost Table</label>
+        <label class="control-label" for="table-list">Import Table</label>
         <div class="controls">
             <div class="span2" style="margin-left: 0;">
+                <input type="hidden" id="table-list" name="table_list" value="" />
                 <table class="table table-bordered table-condensed">
                     <thead>
                     </thead>
                     <tbody>
-                        <tr class="info">
+                        <tr>
                             <td><input type="checkbox" id="table-checkbox-all" /></td>
-                            <td class="span2"><strong>Table</strong></td>
+                            <td class="span2"><strong>Table Name</strong></td>
                         </tr>
+                        <tr><td colspan="2"></td></tr>
                         <?php
                         $db_obj = new DatabaseAccess();
                         $exist_table_array = $db_obj->getAllTables();
+                        $new_table_array = array();
+                        foreach (glob(TABLE_SQL_ROOT.'/*.sql') as $sql_file) {
 
-                        foreach ($exist_table_array as $table_name) {
+                            $new_table_array[] = str_replace('.sql', '', str_replace(TABLE_SQL_ROOT.'/', '', $sql_file));
+
+                        }// foreach (glob(TABLE_SQL_ROOT.'/*.sql') as $sql_file)
+
+                        $total_table_array = array_unique(array_merge($exist_table_array, $new_table_array));
+                        asort($total_table_array);
+
+                        foreach ($total_table_array as $table_name) {
+
+                            if (in_array($table_name, $exist_table_array)) {
                         ?>
                         <tr>
+                            <td></td>
+                            <td class="input-medium">&nbsp;&nbsp;&nbsp;<?php echo $table_name; ?></td>
+                        </tr>
+                        <?php
+                            } else {// end if (in_array($table_name, $exist_table_array))
+                        ?>
+                        <tr class="success">
                             <td>
                                 <input type="checkbox" class="table-checkbox" value="<?php echo $table_name; ?>" />
                             </td>
-                            <td class="input-medium">
-                                <?php echo $table_name; ?>
-                            </td>
+                            <td class="input-medium">+&nbsp;<?php echo $table_name; ?></td>
                         </tr>
                         <?php
-                        }
+                            }// end if (in_array($table_name, $exist_table_array)) else
+
+                        }// end foreach ($total_table_array as $table_name)
                         ?>
                     </tbody>
                 </table>
@@ -39,10 +58,17 @@ include COMPONENT_ROOT.'/navbar/tool-navbar.php';
     </div>
     <div class="control-group">
         <div class="controls">
-            <button type="submit" class="btn btn-primary">Export</button>
+            <button type="submit" class="btn btn-primary">Import</button>
         </div>
     </div>
 </form>
+<hr>
+<div class="alert alert-info">
+    <strong>Note：</strong>
+    <ul>
+        <li>將會在本機資料庫建立勾選的表格</li>
+    </ul>
+</div>
 <script>
 $(document).ready(function() {
 
@@ -79,7 +105,7 @@ $(document).ready(function() {
 
     });
 
-    function exportTableValidate(formData, jqForm, options) {
+    function importTableValidate(formData, jqForm, options) {
 
         var validate = true;
 
@@ -100,12 +126,13 @@ $(document).ready(function() {
 
     }
 
-    function exportTableResponse(response, statusText, xhr, $form) {
+    function importTableResponse(response, statusText, xhr, $form) {
 
         if (response.status.code == 0) {
 
             $('#system-message').html(response.message);
-            $('#system-message').fadeOut(3000);
+            $('#system-message').fadeOut();
+            window.location.reload();
 
         } else {
 
@@ -115,11 +142,11 @@ $(document).ready(function() {
 
     }
 
-    $('#export-table-form').ajaxForm({
+    $('#import-table-form').ajaxForm({
 
-        beforeSubmit: exportTableValidate,
-        success:      exportTableResponse,
-        url: '/action/tool/export-table',
+        beforeSubmit: importTableValidate,
+        success:      importTableResponse,
+        url: '/action/tool/import-table',
         type: 'post',
         dataType: 'json'
 

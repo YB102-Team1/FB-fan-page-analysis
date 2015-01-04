@@ -1,5 +1,5 @@
 <?php
-include COMPONENT_ROOT.'/navbar/tool-navbar.php';
+SiteHelper::getNavBar('tool', $url);
 ?>
 <?php
 phpinfo();

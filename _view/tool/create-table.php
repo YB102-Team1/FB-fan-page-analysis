@@ -1,5 +1,5 @@
 <?php
-include COMPONENT_ROOT.'/navbar/tool-navbar.php';
+SiteHelper::getNavBar('tool', $url);
 ?>
 <style>
 .remove-column-btn {
@@ -10,7 +10,7 @@ div:hover > .remove-column-btn {
     visibility: visible;
 }
 </style>
-<form id="create-model-form" class="form-horizontal">
+<form id="create-table-form" class="form-horizontal">
     <div class="control-group">
         <label class="control-label" for="table-name">Table Name</label>
         <div class="controls">
@@ -18,7 +18,7 @@ div:hover > .remove-column-btn {
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label" for="table-name">New Column</label>
+        <label class="control-label" for="table-name">Add Column</label>
         <div class="controls">
             <div class="span12" style="margin-left: 0;">
                 <table class="table table-bordered table-condensed table-striped">
@@ -79,7 +79,7 @@ div:hover > .remove-column-btn {
         </div>
     </div>
     <div class="control-group">
-        <label class="control-label" for="table-name">SQL</label>
+        <label class="control-label" for="table-name">SQL Preview</label>
         <div class="controls">
             CREATE TABLE IF NOT EXISTS `<span id="table-name-display" style="color: #3A87AD; font-weight: bold;"></span>` (
             <div style="margin-left: 40px; line-height: 25px;">
@@ -87,7 +87,7 @@ div:hover > .remove-column-btn {
                 <div id="column-block" style="color: #3A87AD;"></div>
                 <div>`is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',</div>
                 <div>`create_time` datetime NOT NULL,</div>
-                <div>`modify_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',</div>
+                <div>`modify_time` datetime NOT NULL,</div>
                 <div>`delete_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'</div>
             </div>
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -95,13 +95,20 @@ div:hover > .remove-column-btn {
     </div>
     <div class="control-group">
         <div class="controls">
+            <button type="submit" class="btn btn-primary">Create</button>
             <button id="reset-column-btn" type="button" class="btn btn-default">Reset Column</button>
-            <button type="submit" class="btn btn-primary">Build</button>
         </div>
     </div>
 </form>
 <hr>
-<pre id="response-block"></pre>
+<div class="alert alert-info">
+    <strong>Note：</strong>
+    <ul>
+        <li>將會在本機資料庫建立表格，若已經有<strong>相同名稱</strong>的表格則會<strong><span class="text-error">略過此步驟</span></strong></li>
+        <li>將會產生相對應的 class 檔案，若已經有<strong>相同名稱</strong>的檔案則會<strong><span class="text-error">略過此步驟</span></strong></li>
+        <li>將會產生相對應的 class god 檔案，若已經有<strong>相同名稱</strong>的檔案則會<strong><span class="text-error">略過此步驟</span></strong></li>
+    </ul>
+</div>
 <script>
 $(document).ready(function() {
 
@@ -267,7 +274,7 @@ $(document).ready(function() {
 
     });
 
-    function createModelValidate(formData, jqForm, options) {
+    function createTableValidate(formData, jqForm, options) {
 
         var validate = true;
 
@@ -290,7 +297,7 @@ $(document).ready(function() {
 
     }
 
-    function createModelResponse(response, statusText, xhr, $form) {
+    function createTableResponse(response, statusText, xhr, $form) {
 
         if (response.status.code == 0) {
 
@@ -306,11 +313,11 @@ $(document).ready(function() {
 
     }
 
-    $('#create-model-form').ajaxForm({
+    $('#create-table-form').ajaxForm({
 
-        beforeSubmit: createModelValidate,
-        success:      createModelResponse,
-        url: '/action/tool/create-model',
+        beforeSubmit: createTableValidate,
+        success:      createTableResponse,
+        url: '/action/tool/create-table',
         type: 'post',
         dataType: 'json'
 

@@ -160,10 +160,12 @@ abstract class DataModel {
             $this->is_deleted = 1;
             $sql = "UPDATE $this->table_name SET ".
                    "is_deleted = :is_deleted, ".
+                   "modify_time = :modify_time, ".
                    "delete_time = :delete_time ".
                    "WHERE id = :id";
             $param = array();
             $param[':is_deleted'] = $this->is_deleted;
+            $param[':modify_time'] = $now;
             $param[':delete_time'] = $now;
             $param[':id'] = $this->id;
 
@@ -188,11 +190,13 @@ abstract class DataModel {
         $this->is_deleted = 0;
         $sql = "UPDATE $this->table_name SET ".
                "is_deleted = :is_deleted, ".
-               "modify_time = :modify_time ".
+               "modify_time = :modify_time, ".
+               "delete_time = :delete_time ".
                "WHERE id = :id";
         $param = array();
         $param[':is_deleted'] = $this->is_deleted;
         $param[':modify_time'] = $now;
+        $param[':delete_time'] = '0000-00-00 00:00:00';
         $param[':id'] = $this->id;
 
         return $this->db_obj->update($sql, $param);

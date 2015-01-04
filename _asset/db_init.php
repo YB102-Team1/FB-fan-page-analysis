@@ -25,23 +25,4 @@ if (!$database_selected) {
     }
 
 }
-
-// read tables
-
-// create tables
-/*
-$sql = "CREATE TABLE IF NOT EXISTS `test_table` (
-            `id` int(11) unsigned NOT NULL,
-            `test_column` varchar(255) NOT NULL,
-            `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
-            `create_time` datetime NOT NULL,
-            `modify_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-            `delete_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-mysqli_query($connection, $sql);
-$sql = "ALTER TABLE `test_table` ADD PRIMARY KEY (`id`);";
-mysqli_query($connection, $sql);
-$sql = "ALTER TABLE `test_table` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;";
-mysqli_query($connection, $sql);
-*/
 ?>

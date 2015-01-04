@@ -1,14 +1,17 @@
 <?php
-include COMPONENT_ROOT.'/navbar/tool-navbar.php';
+SiteHelper::getNavBar('tool', $url);
 ?>
-<form id="eval-code-form" style="margin: 0 3%;">
+<form id="eval-code-form">
     &lt;?php<br>
     <textarea name="code" rows="15" style="width: 99%; resize: none; overflow: scroll; margin-bottom: 0;"></textarea><br>
     ?&gt;<br>
     <button type="submit" class="btn btn-primary">Run</button>
 </form>
 <hr>
-<pre id="eval-block" style="margin: 0 3%;"></pre>
+<div>
+    Result:<br>
+    <pre id="eval-block"></pre>
+</div>
 <script>
 $(document).ready(function() {
 

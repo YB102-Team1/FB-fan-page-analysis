@@ -38,9 +38,9 @@ class ModelHelper {
                        '`delete_time` datetime NOT NULL DEFAULT \'0000-00-00 00:00:00\' '.
                    ') ENGINE=InnoDB DEFAULT CHARSET=utf8;';
             $create_result = $db_obj->query($sql);
-            $sql = "ALTER TABLE `test_table` ADD PRIMARY KEY (`id`);";
+            $sql = "ALTER TABLE `$table_name` ADD PRIMARY KEY (`id`);";
             $primary_key_result = $db_obj->query($sql);
-            $sql = "ALTER TABLE `test_table` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;";
+            $sql = "ALTER TABLE `$table_name` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;";
             $auto_increment_result = $db_obj->query($sql);
 
             unset($db_obj);
@@ -134,31 +134,110 @@ class ModelHelper {
 
     }// end function createActionFile
 
-    public static function createSQLFile($table_name) {
+    public static function exportTable($table_name) {
 
-        $sql_path = ASSET_ROOT.'/sql/'.$table_name.'.sql';
+        $sql_path = TABLE_SQL_ROOT.'/'.$table_name.'.sql';
+
+        $sql_content = str_replace('???', $table_name, file_get_contents(TABLE_SQL_TEMPLATE_FILE));
+        $db_obj = new DatabaseAccess();
+        $column_array = $db_obj->getTableColumns($table_name);
+        $column_list = "";
+        foreach ($column_array as $column_name => $attribute) {
+
+            $column_list .= "    `$column_name` $attribute,".PHP_EOL;
+
+        }// end foreach ($column_array as $column_name => $attribute)
+
+        return file_put_contents($sql_path, str_replace('    ...'.PHP_EOL, $column_list, $sql_content));
+
+    }// end function exportTable
+
+    public static function importTable($table_name) {
+
+        $sql_path = TABLE_SQL_ROOT.'/'.$table_name.'.sql';
 
         if (!file_exists($sql_path)) {
 
-            $sql_content = str_replace('???', $table_name, file_get_contents(SQL_TEMPLATE_FILE));
-            $db_obj = new DatabaseAccess();
-            $column_array = $db_obj->getTableColumns($table_name);
-            $column_list = "";
-            foreach ($column_array as $column_name => $attribute) {
-
-                $column_list .= "    `$column_name` $attribute,".PHP_EOL;
-
-            }// end foreach ($column_array as $column_name => $attribute)
-
-            return file_put_contents($sql_path, str_replace('    ...'.PHP_EOL, $column_list, $sql_content));
+            return false;
 
         } else {// end if (!file_exists($sql_path))
 
-            return false;
+            $db_obj = new DatabaseAccess();
+            $sql = file_get_contents($sql_path);
+            $create_result = $db_obj->query($sql);
+            $sql = "ALTER TABLE `$table_name` ADD PRIMARY KEY (`id`);";
+            $primary_key_result = $db_obj->query($sql);
+            $sql = "ALTER TABLE `$table_name` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;";
+            $auto_increment_result = $db_obj->query($sql);
+            unset($db_obj);
+
+            return $create_result && $primary_key_result && $auto_increment_result;
 
         }// end if (!file_exists($sql_path)) else
 
-    }// end function createSQLFile
+    }// end function importTable
+
+    public static function exportData($table_name) {
+
+        $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
+        $god_class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name))).'God';
+
+        $db_obj = new DatabaseAccess();
+        $column_array = $db_obj->getTableColumns($table_name);
+
+        $sql_content = "INSERT INTO `$table_name`".PHP_EOL."(`id`, ";
+        foreach ($column_array as $column_name => $attribute) {
+
+            $sql_content .= "`$column_name`, ";
+
+        }// end foreach ($column_array as $column_name => $attribute)
+        $sql_content .= "`is_deleted`, `create_time`, `modify_time`, `delete_time`)".PHP_EOL."VALUES".PHP_EOL;
+
+        $class_god_obj = new $god_class_name;
+        $all_data = $class_god_obj->getAll();
+
+        foreach ($all_data as $data) {
+
+            $sql_content .= "('".$data['id']."', ";
+            foreach ($column_array as $column_name => $attribute) {
+
+                $sql_content .= "'".$data[$column_name]."', ";
+
+            }// end foreach ($column_array as $column_name => $attribute)
+            $sql_content .= "'".$data['is_deleted']."', ".
+                            "'".$data['create_time']."', ".
+                            "'".$data['modify_time']."', ".
+                            "'".$data['delete_time']."'".
+                            "),".PHP_EOL;
+
+        }// end foreach ($all_data as $data)
+
+        return file_put_contents($sql_path, substr($sql_content, 0, -2));
+
+    }// end function exportData
+
+    public static function syncData($table_name) {
+
+        $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
+
+        if (!file_exists($sql_path)) {
+
+            return false;
+
+        } else {// end if (!file_exists($sql_path))
+
+            $db_obj = new DatabaseAccess();
+            $sql = "TRUNCATE $table_name";
+            $auto_increment_result = $db_obj->query($sql);
+            $sql = file_get_contents($sql_path);
+            $import_result = $db_obj->query($sql);
+            unset($db_obj);
+
+            return $import_result;
+
+        }// end if (!file_exists($sql_path)) else
+
+    }// end function syncData
 
 }// end class ModelHelper
 ?>

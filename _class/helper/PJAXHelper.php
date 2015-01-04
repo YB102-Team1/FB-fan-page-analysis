@@ -23,16 +23,16 @@ class PJAXHelper {
 
     }// end function getPJAXContainer
 
-    public static function run($page_title, $file_path, $http_param = array()) {
+    public static function run($page_title, $url, $http_param = array()) {
 
         if (self::isPJAX() && self::getPJAXContainer() == '#main-section') {
 
             echo "<title>$page_title</title>";
-            include VIEW_ROOT.$file_path;
+            include VIEW_ROOT.$url;
 
         } else {// end if (self::isPJAX() && self::getPJAXContainer() == '#main-section')
 
-            $view_path = VIEW_ROOT.$file_path;
+            $view_path = VIEW_ROOT.$url;
             if (!file_exists($view_path)) {
 
                 echo 'View file missing';

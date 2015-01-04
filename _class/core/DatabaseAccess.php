@@ -68,6 +68,21 @@ class DatabaseAccess {
 
    }// end function getTableColumns
 
+   public function getTableLastModifyTime($table_name) {
+
+      $sql = "SELECT MAX(modify_time) last_time FROM $table_name LIMIT 1";
+      $query_instance = $this->link->query($sql);
+
+      foreach ($query_instance as $instance_data) {
+
+         $last_mofity_time = $instance_data['last_time'];
+
+      }// end foreach ($query_instance as $instance_data)
+
+      return StringHelper::dateFormat($last_mofity_time, 0, 19);
+
+   }// end function getTableLastModifyTime
+
    public function insert($sql) {
 
       $query = $this->link->query($sql);
