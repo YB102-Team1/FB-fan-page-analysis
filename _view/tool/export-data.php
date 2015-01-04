@@ -26,7 +26,7 @@ SiteHelper::getNavBar('tool', $url);
 
                             $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
                             $data_last_modify_time = $db_obj->getTableLastModifyTime($table_name);
-                            $file_last_modify_time = filemtime($sql_path) ? date('Y/m/d H:i:s', filemtime($sql_path)) : '--';
+                            $file_last_modify_time = @filemtime($sql_path) ? date('Y/m/d H:i:s', filemtime($sql_path)) : '--';
 
                             $row_class = '';
                             $file_last_modify_time_class = '';
