@@ -8,7 +8,8 @@ SiteHelper::getNavBar('tool', $url);
 <div class="alert alert-info">
     <strong>Note：</strong>
     <ul>
-        <li><strong><span class="text-error">請先確認資料庫使用者帳號已經建立</span></strong></li>
+        <li><strong><span class="text-error">請先確認 phpMyAdmin 使用者帳號已經建立</span></strong></li>
+        <li>將會在本機建立資料庫，若已經有<strong>相同名稱</strong>的資料庫則會<strong><span class="text-error">略過此步驟</span></strong></li>
         <li>將會在本機資料庫建立表格，若已經有<strong>相同名稱</strong>的表格則會<strong><span class="text-error">略過此步驟</span></strong></li>
         <li>將會產生相對應的 class 檔案，若已經有<strong>相同名稱</strong>的檔案則會<strong><span class="text-error">略過此步驟</span></strong></li>
         <li>將會產生相對應的 class god 檔案，若已經有<strong>相同名稱</strong>的檔案則會<strong><span class="text-error">略過此步驟</span></strong></li>
