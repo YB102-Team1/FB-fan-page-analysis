@@ -42,4 +42,23 @@ define(CLASS_LOADER_FILE, CONFIG_ROOT.'/class_loader.inc');
 // include config files
 require_once GLOBAL_VARIABLES_FILE;
 require_once CLASS_LOADER_FILE;
+
+// define some global function
+function in_array_r($needle, $haystack, $strict = false) {
+
+    foreach ($haystack as $item) {
+
+        if (   ($strict ? $item === $needle : $item == $needle)
+            || (is_array($item) && in_array_r($needle, $item, $strict))
+        ) {
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
 ?>

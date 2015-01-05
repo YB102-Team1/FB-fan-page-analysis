@@ -35,7 +35,7 @@ $(document).ready(function() {
         $('#eval-block').html(response);
 
         $('#system-message').html('成功');
-        $('#system-message').fadeOut(3000);
+        $('#system-message').fadeOut(2000);
 
     }
 

@@ -8,14 +8,18 @@ class SiteHelper {
         case 'tool':
             $nav_array = array(
                 "PHP Test" => "/tool/php-test.php",
-                "Table" => array(
+                "Table & Data" => array(
                     "Create Table" => "/tool/create-table.php",
-                    "Export Table" => "/tool/export-table.php",
-                    "Import Table" => "/tool/import-table.php"
-                ),
-                "Data" => array(
-                    "Export Data" => "/tool/export-data.php",
-                    "Sync Data" => "/tool/sync-data.php"
+                    "Table" => array(
+                        "Export Table" => "/tool/export-table.php",
+                        "Import Table" => "/tool/import-table.php"
+                    ),
+                    "Data" => array(
+                        "Export Data" => "/tool/export-data.php",
+                        "Sync Data" => "/tool/sync-data.php"
+                    ),
+                    "divider",
+                    "Arrnge Database" => "/tool/arrange-database.php"
                 ),
                 "PHP Info" => "/tool/phpinfo.php"
             );

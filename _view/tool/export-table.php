@@ -111,12 +111,12 @@ $(document).ready(function() {
         if (response.status.code == 0) {
 
             $('#system-message').html(response.message);
-            $('#system-message').fadeOut(3000);
+            $('#system-message').fadeOut(2000);
 
         } else {
 
             $('#system-message').html('失敗');
-            $('#system-message').fadeOut(3000);
+            $('#system-message').fadeOut(2000);
         }
 
     }

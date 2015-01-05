@@ -189,6 +189,12 @@ class ToolAction {
 
             break;
 
+        case 'arrange-database':
+
+            include COMPONENT_ROOT.'/tool/arrange-database.php';
+
+            break;
+
         default:
             echo 'Undefined post action';
             break;

@@ -137,7 +137,7 @@ $(document).ready(function() {
         } else {
 
             $('#system-message').html('失敗');
-            $('#system-message').fadeOut(3000);
+            $('#system-message').fadeOut(2000);
         }
 
     }
