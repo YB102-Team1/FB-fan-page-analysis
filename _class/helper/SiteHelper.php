@@ -1,7 +1,9 @@
 <?php
-class SiteHelper {
+class SiteHelper
+{
 
-    public static function getNavBar($type, $url) {
+    public static function getNavBar($type, $url)
+    {
 
         switch ($type) {
 

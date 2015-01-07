@@ -1,9 +1,11 @@
 <?php
-class DatabasePDO {
+class DatabasePDO
+{
 
    private $link;
 
-   public function __construct() {
+   public function __construct()
+   {
 
       include DB_CONFIG_FILE;
 
@@ -26,7 +28,8 @@ class DatabasePDO {
 
    }// end function __construct
 
-   public function insert($sql, $param=array()) {
+   public function insert($sql, $param=array())
+   {
 
       $statement = $this->link->prepare($sql);
       $query_result = $statement->execute($param);
@@ -45,7 +48,8 @@ class DatabasePDO {
 
    }// end function insert
 
-   public function select($sql, $param=array()) {
+   public function select($sql, $param=array())
+   {
 
       $statement = $this->link->prepare($sql);
       $query_result = $statement->execute($param);
@@ -64,7 +68,8 @@ class DatabasePDO {
 
    }// end function select
 
-   public function update($sql, $param=array()) {
+   public function update($sql, $param=array())
+   {
 
       $statement = $this->link->prepare($sql);
       $query_result = $statement->execute($param);
@@ -83,7 +88,8 @@ class DatabasePDO {
 
    }// end function update
 
-   public function delete($sql, $param=array()) {
+   public function delete($sql, $param=array())
+   {
 
       $statement = $this->link->prepare($sql);
       $query_result = $statement->execute($param);

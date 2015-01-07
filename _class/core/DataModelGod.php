@@ -1,10 +1,12 @@
 <?php
-abstract class DataModelGod {
+abstract class DataModelGod
+{
 
     protected $db_obj;
     protected $table_name;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         // intialize basic variables
         $this->db_obj = new DatabasePDO();
@@ -16,7 +18,8 @@ abstract class DataModelGod {
 
     }// end function __construct
 
-    public function getAll() {
+    public function getAll()
+    {
 
         $sql = "SELECT * FROM $this->table_name";
 
@@ -24,7 +27,8 @@ abstract class DataModelGod {
 
     }// end function getAll
 
-    public function getDataCount() {
+    public function getDataCount()
+    {
 
         $id_count = 0;
         $sql = "SELECT COUNT(id) id_count FROM $this->table_name WHERE is_deleted = 0";
@@ -41,7 +45,8 @@ abstract class DataModelGod {
 
     }// end function getDataCount
 
-    public function getMaxId() {
+    public function getMaxId()
+    {
 
         $max_id = 0;
         $sql = "SELECT MAX(id) max_id FROM $this->table_name";
@@ -58,7 +63,8 @@ abstract class DataModelGod {
 
     }// end function getMaxId
 
-    public function check($instance_property, $undeleted_only = false) {
+    public function check($instance_property, $undeleted_only = false)
+    {
 
         $instance_id = 0;
         $param = array();
@@ -110,7 +116,8 @@ abstract class DataModelGod {
 
     }// end function check
 
-    public function create($class_property_array) {
+    public function create($class_property_array)
+    {
 
         $now = date('Y-m-d H:i:s');
 
@@ -147,7 +154,8 @@ abstract class DataModelGod {
 
     }// end function create
 
-    public function __destruct() {
+    public function __destruct()
+    {
 
         unset($this->table_name);
 

@@ -1,9 +1,11 @@
 <?php
-class DatabaseAccess {
+class DatabaseAccess
+{
 
    private $link;
 
-   public function __construct() {
+   public function __construct()
+   {
 
       include DB_CONFIG_FILE;
 
@@ -13,7 +15,8 @@ class DatabaseAccess {
 
    }// end function __construct
 
-   public function getAllTables() {
+   public function getAllTables()
+   {
 
       include DB_CONFIG_FILE;
 
@@ -31,7 +34,8 @@ class DatabaseAccess {
 
    }// end function getAllTables
 
-   public function getTableColumns($table_name) {
+   public function getTableColumns($table_name)
+   {
 
       $sql = "SHOW COLUMNS FROM $table_name";
       $query_instance = $this->link->query($sql);
@@ -68,7 +72,8 @@ class DatabaseAccess {
 
    }// end function getTableColumns
 
-   public function getTableLastModifyTime($table_name) {
+   public function getTableLastModifyTime($table_name)
+   {
 
       $sql = "SELECT MAX(modify_time) last_time FROM $table_name LIMIT 1";
       $query_instance = $this->link->query($sql);
@@ -83,7 +88,8 @@ class DatabaseAccess {
 
    }// end function getTableLastModifyTime
 
-   public function insert($sql) {
+   public function insert($sql)
+   {
 
       $query = $this->link->query($sql);
       if (!$query) {
@@ -98,7 +104,8 @@ class DatabaseAccess {
 
    }// end function insert
 
-   public function select($sql) {
+   public function select($sql)
+   {
 
       $query = $this->link->query($sql);
       if (!$query) {
@@ -113,7 +120,8 @@ class DatabaseAccess {
 
    }// end function select
 
-   public function update($sql) {
+   public function update($sql)
+   {
 
       $query = $this->link->query($sql);
       if (!$query) {
@@ -128,7 +136,8 @@ class DatabaseAccess {
 
    }// end function update
 
-   public function delete($sql) {
+   public function delete($sql)
+   {
 
       $query = $this->link->query($sql);
       if (!$query) {
@@ -143,7 +152,8 @@ class DatabaseAccess {
 
    }// end function delete
 
-   public function query($sql) {
+   public function query($sql)
+   {
 
       $query = $this->link->query($sql);
       if (!$query) {
@@ -158,7 +168,8 @@ class DatabaseAccess {
 
    }// end function query
 
-   public function __destruct() {
+   public function __destruct()
+   {
 
       $this->link->close();
 

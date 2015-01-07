@@ -1,7 +1,9 @@
 <?php
-class PJAXHelper {
+class PJAXHelper
+{
 
-    public static function isPJAX() {
+    public static function isPJAX()
+    {
 
         if (   array_key_exists('HTTP_X_PJAX', $_SERVER)
             && $_SERVER['HTTP_X_PJAX'] === 'true'
@@ -17,13 +19,15 @@ class PJAXHelper {
 
     }// end function isPJAX
 
-    public static function getPJAXContainer() {
+    public static function getPJAXContainer()
+    {
 
         return $_SERVER['HTTP_X_PJAX_CONTAINER'];
 
     }// end function getPJAXContainer
 
-    public static function run($page_title, $url, $http_param = array()) {
+    public static function run($page_title, $url, $http_param = array())
+    {
 
         if (self::isPJAX() && self::getPJAXContainer() == '#main-section') {
 

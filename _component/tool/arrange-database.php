@@ -21,7 +21,7 @@ echo 'Check database...';
 $database_selected = mysqli_select_db($connection, $database_name);
 if (!$database_selected) {
 
-    echo "Not exists".PHP_EOL;
+    echo "not exists".PHP_EOL;
     $sql = "CREATE DATABASE $database_name";
     if (!mysqli_query($connection, $sql)) {
 
@@ -29,7 +29,7 @@ if (!$database_selected) {
         exit;
 
     }
-    echo "\t=>Create database `$database_name` done".PHP_EOL.PHP_EOL;
+    echo "\tCreate database `$database_name`...done".PHP_EOL.PHP_EOL;
 
 } else {
 

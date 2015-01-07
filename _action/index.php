@@ -1,12 +1,14 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'].'/_config/system_config.inc';
 
-class ActionProcessor {
+class ActionProcessor
+{
 
     private $_controller = false;
     private $_segments = false;
 
-    function __construct() {
+    function __construct()
+    {
 
         if (!isset($_SERVER['PATH_INFO']) or $_SERVER['PATH_INFO'] == '/') {
 
@@ -42,7 +44,8 @@ class ActionProcessor {
 
     }// end function __construct
 
-    function run() {
+    function run()
+    {
 
         if ($this->_controller === false) {
 

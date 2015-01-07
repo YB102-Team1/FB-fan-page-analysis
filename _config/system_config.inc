@@ -44,7 +44,8 @@ require_once GLOBAL_VARIABLES_FILE;
 require_once CLASS_LOADER_FILE;
 
 // define some global function
-function in_array_r($needle, $haystack, $strict = false) {
+function in_array_r($needle, $haystack, $strict = false)
+{
 
     foreach ($haystack as $item) {
 

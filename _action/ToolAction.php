@@ -1,7 +1,9 @@
 <?php
-class ToolAction {
+class ToolAction
+{
 
-    public function get($segments) {
+    public function get($segments)
+    {
 
         $action_id = $segments[0];
 
@@ -15,7 +17,8 @@ class ToolAction {
 
     }// end function get
 
-    public function post($segments) {
+    public function post($segments)
+    {
 
         $action_id = $segments[0];
 

@@ -1,7 +1,9 @@
 <?php
-class ModelHelper {
+class ModelHelper
+{
 
-    public static function createTable($table_name, $column_array) {
+    public static function createTable($table_name, $column_array)
+    {
 
         $db_obj = new DatabaseAccess();
         $exist_table_array = $db_obj->getAllTables();
@@ -57,7 +59,8 @@ class ModelHelper {
 
     }// end function createTable
 
-    public static function createClassFile($table_name, $column_array) {
+    public static function createClassFile($table_name, $column_array)
+    {
 
         $class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name)));
         $class_path = CLASS_ROOT.'/model/'.$class_name.'.php';
@@ -96,7 +99,8 @@ class ModelHelper {
 
     }// end function createClassFile
 
-    public static function createClassGodFile($table_name) {
+    public static function createClassGodFile($table_name)
+    {
 
         $class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name)));
         $class_god_path = CLASS_ROOT.'/model/'.$class_name.'God.php';
@@ -115,7 +119,8 @@ class ModelHelper {
 
     }// end function createClassGodFile
 
-    public static function createActionFile($type_name) {
+    public static function createActionFile($type_name)
+    {
 
         $action_name = str_replace(' ', '', ucwords(str_replace('-', ' ', $type_name)));
         $action_path = CLASS_ROOT.'/'.$class_name.'Action.php';
@@ -134,7 +139,8 @@ class ModelHelper {
 
     }// end function createActionFile
 
-    public static function exportTable($table_name) {
+    public static function exportTable($table_name)
+    {
 
         $sql_path = TABLE_SQL_ROOT.'/'.$table_name.'.sql';
 
@@ -152,7 +158,8 @@ class ModelHelper {
 
     }// end function exportTable
 
-    public static function importTable($table_name) {
+    public static function importTable($table_name)
+    {
 
         $sql_path = TABLE_SQL_ROOT.'/'.$table_name.'.sql';
 
@@ -177,7 +184,8 @@ class ModelHelper {
 
     }// end function importTable
 
-    public static function exportData($table_name) {
+    public static function exportData($table_name)
+    {
 
         $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
         $god_class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name))).'God';
@@ -216,7 +224,8 @@ class ModelHelper {
 
     }// end function exportData
 
-    public static function syncData($table_name) {
+    public static function syncData($table_name)
+    {
 
         $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
 

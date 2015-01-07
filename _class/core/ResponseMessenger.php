@@ -1,7 +1,9 @@
 <?php
-class ResponseMessenger {
+class ResponseMessenger
+{
 
-    public static function json($status, $message = "", $parameter = array()) {
+    public static function json($status, $message = "", $parameter = array())
+    {
 
         if ($status == 'success') {
 

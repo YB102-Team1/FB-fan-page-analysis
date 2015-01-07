@@ -1,5 +1,6 @@
 <?php
-class ClassGod extends DataModelGod {
+class ClassGod extends DataModelGod
+{
 
     /**
      * inherited variables:

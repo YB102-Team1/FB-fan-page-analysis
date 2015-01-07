@@ -1,5 +1,6 @@
 <?php
-abstract class DataModel {
+abstract class DataModel
+{
 
     protected $db_obj;
     protected $table_name;
@@ -9,7 +10,8 @@ abstract class DataModel {
     protected $modify_time;
     protected $delete_time;
 
-    public function __construct($id) {
+    public function __construct($id)
+    {
 
         if (empty($id)) {
 
@@ -110,7 +112,8 @@ abstract class DataModel {
 
     }// end function __set
 
-    public function save() {
+    public function save()
+    {
 
         $class_property_array = get_object_vars($this);
         $now = date('Y-m-d H:i:s');
@@ -151,7 +154,8 @@ abstract class DataModel {
 
     }// end function save
 
-    public function destroy($type = 'mark') {
+    public function destroy($type = 'mark')
+    {
 
         $now = date('Y-m-d H:i:s');
 
@@ -183,7 +187,8 @@ abstract class DataModel {
 
     }// end function destroy
 
-    public function recover() {
+    public function recover()
+    {
 
         $now = date('Y-m-d H:i:s');
 
@@ -203,7 +208,8 @@ abstract class DataModel {
 
     }// end function recover
 
-    public function __destruct() {
+    public function __destruct()
+    {
 
         $class_property_array = get_object_vars($this);
 

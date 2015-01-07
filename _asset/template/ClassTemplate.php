@@ -1,5 +1,6 @@
 <?php
-class Class extends DataModel {
+class Class extends DataModel
+{
 
     /**
      * inherited variables:
