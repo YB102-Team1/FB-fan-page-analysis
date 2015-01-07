@@ -78,28 +78,31 @@ class Facebook():
         result = BeautifulSoup(content)
         fans = result.select('.uiProfileBlockContent')
         print 'Page ' + str(self.page_count) + ' found ' + str(len(fans)) + ' fans.'
-        fid = open('data.txt', 'a')
-        for fan in fans:
-            alink = fan.select('.fcb a')
-            row = []
-            for a in alink:
-                user_fb_id = a.parent.parent.parent.parent.parent.parent.parent['id'].replace('adminableItem_', '')
-                row.append(user_fb_id)
-                user_name = a.text.encode('utf-8')
-                row.append(user_name)
-                if user_fb_id in a['href']:
-                    user_profile = a['href'].replace('&fref=pb&hc_location=profile_browser', '')
-                    row.append(user_profile)
-                    # row.append(user_profile + '&sk=likes')
-                else:
-                    user_profile = a['href'].replace('?fref=pb&hc_location=profile_browser', '')
-                    row.append(user_profile)
-                    # row.append(user_profile + '/likes')
-                fid.write(','.join(row) + '\n')
-        fid.close()
-        print 'Page ' + str(self.page_count) + ' finished.'
-        self.page_count = self.page_count + 1
-        # self.next_page(result)
+        if len(fans) != 0:
+            fid = open('data.txt', 'a')
+            for fan in fans:
+                alink = fan.select('.fcb a')
+                row = []
+                for a in alink:
+                    user_fb_id = a.parent.parent.parent.parent.parent.parent.parent['id'].replace('adminableItem_', '')
+                    row.append(user_fb_id)
+                    user_name = a.text.encode('utf-8')
+                    row.append(user_name)
+                    if user_fb_id in a['href']:
+                        user_profile = a['href'].replace('&fref=pb&hc_location=profile_browser', '')
+                        row.append(user_profile)
+                        # row.append(user_profile + '&sk=likes')
+                    else:
+                        user_profile = a['href'].replace('?fref=pb&hc_location=profile_browser', '')
+                        row.append(user_profile)
+                        # row.append(user_profile + '/likes')
+                    fid.write(','.join(row) + '\n')
+            fid.close()
+            print 'Page ' + str(self.page_count) + ' finished.'
+            self.page_count = self.page_count + 1
+            # self.next_page(result)
+        else:
+            print 'script ended.'
 
 if __name__ == '__main__':
     f = Facebook("samas0120@gmail.com", "xup6u4vu;6")
