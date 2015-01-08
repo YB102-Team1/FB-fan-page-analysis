@@ -1,4 +1,5 @@
 # __author__ = 'Samas Lin<samas0120@gmail.com>'
+# crwal facebook fan page liked user
 import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
 
