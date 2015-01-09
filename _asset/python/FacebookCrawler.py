@@ -1,11 +1,9 @@
+#-*- coding:utf-8 -*-
 # __author__ = 'Samas Lin<samas0120@gmail.com>'
-# crwal facebook fan page liked user
 import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
 
-class Facebook():
-
-    page_count = 1
+class FacebookCrawler():
 
     def __init__(self, email, password):
 
@@ -27,84 +25,46 @@ class Facebook():
         usock = self.opener.open('http://www.facebook.com')
         usock = self.opener.open(url, data)
         if "Logout" in usock.read():
-            print "Logged in."
+            print "Login successfully...\n"
             a = usock.read()
             if "logout" in a:
-                print "Logged in."
+                print "Login successfully...\n"
                 return a
         else:
-            print "failed login"
+            print "Failed login"
             print usock.read()
             sys.exit()
 
-    def claw(self, url):
-
-        self.login()
-        usock = self.opener.open(url)
-        content = usock.read()
-        result = BeautifulSoup(content)
-        fans = result.select('.uiProfileBlockContent')
-        print 'Page ' + str(self.page_count) + ' found ' + str(len(fans)) + ' fans.'
-        fid = open('data.txt', 'w')
-        for fan in fans:
-            alink = fan.select('.fcb a')
-            row = []
-            for a in alink:
-                user_fb_id = a.parent.parent.parent.parent.parent.parent.parent['id'].replace('adminableItem_', '')
-                row.append(user_fb_id)
-                user_name = a.text.encode('utf-8')
-                row.append(user_name)
-                if user_fb_id in a['href']:
-                    user_profile = a['href'].replace('&fref=pb&hc_location=profile_browser', '')
-                    row.append(user_profile)
-                    # row.append(user_profile + '&sk=likes')
-                else:
-                    user_profile = a['href'].replace('?fref=pb&hc_location=profile_browser', '')
-                    row.append(user_profile)
-                    # row.append(user_profile + '/likes')
-                fid.write(','.join(row) + '\n')
-        fid.close()
-        print 'Page ' + str(self.page_count) + ' finished.'
-        self.page_count = self.page_count + 1
-        self.next_page(result)
-
-    def next_page(self, html):
-
-        next_page = html.select('.morePager')
-        for link in next_page:
-            next_page_url = 'https://www.facebook.com' + link.find('div').find('a')['href'] + '&__user=100000597488537&__a=1&__rev=1552948'
-        usock = self.opener.open(next_page_url)
-        content_list = usock.read().replace('for (;;);{"__ar":1,"payload":null,"domops":[["appendContent","^div.fbProfileBrowserListContainer",true,', '').split('}')
-        content = json.loads(content_list[0] + '}')['__html'].encode('utf-8')
-        result = BeautifulSoup(content)
-        fans = result.select('.uiProfileBlockContent')
-        print 'Page ' + str(self.page_count) + ' found ' + str(len(fans)) + ' fans.'
-        if len(fans) != 0:
-            fid = open('data.txt', 'a')
-            for fan in fans:
-                alink = fan.select('.fcb a')
-                row = []
-                for a in alink:
-                    user_fb_id = a.parent.parent.parent.parent.parent.parent.parent['id'].replace('adminableItem_', '')
-                    row.append(user_fb_id)
-                    user_name = a.text.encode('utf-8')
-                    row.append(user_name)
-                    if user_fb_id in a['href']:
-                        user_profile = a['href'].replace('&fref=pb&hc_location=profile_browser', '')
-                        row.append(user_profile)
-                        # row.append(user_profile + '&sk=likes')
-                    else:
-                        user_profile = a['href'].replace('?fref=pb&hc_location=profile_browser', '')
-                        row.append(user_profile)
-                        # row.append(user_profile + '/likes')
-                    fid.write(','.join(row) + '\n')
-            fid.close()
-            print 'Page ' + str(self.page_count) + ' finished.'
-            self.page_count = self.page_count + 1
-            # self.next_page(result)
-        else:
-            print 'script ended.'
-
 if __name__ == '__main__':
-    f = Facebook("samas0120@gmail.com", "xup6u4vu;6")
-    f.claw('https://www.facebook.com/browse/?type=page_fans&page_id=57613404340')
+    fan_page_id = 57613404340
+    f = FacebookCrawler("samas0120@gmail.com", "xup6u4vu;6")
+    f.login()
+    url = 'https://www.facebook.com/browse/?type=page_fans&page_id=' + str(fan_page_id)
+    usock = f.opener.open(url)
+    content = usock.read()
+    soup_content = BeautifulSoup(content)
+    fans = soup_content.select('.uiProfileBlockContent')
+    print '\nFound ' + str(len(fans)) + ' fans.'
+    target_file = open('test_crawler.txt', 'w')
+    for fan in fans:
+        alink = fan.select('.fcb a')
+        row = []
+        for a in alink:
+            user_fb_id = a.parent.parent.parent.parent.parent.parent.parent['id'].replace('adminableItem_', '')
+            row.append(user_fb_id)
+            user_name = a.text.encode('utf-8')
+            row.append(user_name)
+            if user_fb_id in a['href']:
+                user_profile = a['href'].replace('&fref=pb&hc_location=profile_browser', '')
+                row.append(user_profile)
+                # row.append(user_profile + '&sk=likes')
+            else:
+                user_profile = a['href'].replace('?fref=pb&hc_location=profile_browser', '')
+                row.append(user_profile)
+                # row.append(user_profile + '/likes')
+            target_file.write(','.join(row) + '\n')
+    target_file.close()
+    next_page = soup_content.select('.morePager')
+    for link in next_page:
+        next_page_url = 'https://www.facebook.com' + link.find('div').find('a')['href'] + '&__user=100000597488537&__a=1&__rev=1552948'
+    print '\nNext page url:\n' + next_page_url + '\n'
