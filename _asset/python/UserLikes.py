@@ -22,6 +22,16 @@ class UserLikes(FacebookCrawler):
         target_file.close()
         self.login()
 
+    def get_list_first_page(self, html):
+        page_list = '<ul class="' + html.split('<!-- <ul class="')[1].split('-->')[0]
+        soup = BeautifulSoup(page_list)
+        links = soup.select('.fsl a')
+        target_file = open(self.target_file, 'a')
+        for link in links:
+            page_id = json.loads(link['data-gt'])['engagement']['eng_tid'].encode('utf-8')
+            target_file.write(user_id + ',' + page_id + '\n')
+        target_file.close()
+
     def get_user_likes(self, user_id, page):
 
         # list length is 8
@@ -53,14 +63,7 @@ class UserLikes(FacebookCrawler):
             html = response.read()
             if 'https://www.facebook.com/images/profile/timeline/app_icons/likes_24.png' in html:
                 sys.stdout.write('Getting user ' + str(user_id) + ' likes page...')
-                page_list = '<ul class="' + html.split('<!-- <ul class="')[1].split('-->')[0]
-                soup = BeautifulSoup(page_list)
-                links = soup.select('.fsl a')
-                target_file = open(self.target_file, 'a')
-                for link in links:
-                    page_id = json.loads(link['data-gt'])['engagement']['eng_tid'].encode('utf-8')
-                    target_file.write(user_id + ',' + page_id + '\n')
-                target_file.close()
+                self.get_list_first_page(html)
                 self.get_user_likes(user_id, 2)
                 print('done')
             else:
@@ -68,14 +71,7 @@ class UserLikes(FacebookCrawler):
                 html = response.read()
                 if 'https://www.facebook.com/images/profile/timeline/app_icons/music_24.png' in html:
                     sys.stdout.write('Getting user ' + str(user_id) + ' music page...')
-                    page_list = '<ul class="' + html.split('<!-- <ul class="')[1].split('-->')[0]
-                    soup = BeautifulSoup(page_list)
-                    links = soup.select('.fsl a')
-                    target_file = open(self.target_file, 'a')
-                    for link in links:
-                        page_id = json.loads(link['data-gt'])['engagement']['eng_tid'].encode('utf-8')
-                        target_file.write(user_id + ',' + page_id + '\n')
-                    target_file.close()
+                    self.get_list_first_page(html)
                     self.get_user_music(user_id, 2)
                     print('done')
                 else:
