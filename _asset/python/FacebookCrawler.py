@@ -1,14 +1,17 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 # __author__ = 'Samas Lin<samas0120@gmail.com>'
 import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
 
-class FacebookCrawler():
+class FacebookCrawler(object):
 
-    def __init__(self, email, password):
+    fan_page_id = 57613404340
+    admin_id = 100000597488537
+    admin_email = 'samas0120@gmail.com'
+    admin_pwd = 'xup6u4vu;6'
 
-        self.email = email
-        self.password = password
+    def __init__(self):
+
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = [
@@ -21,31 +24,30 @@ class FacebookCrawler():
     def login(self):
 
         url = 'https://login.facebook.com/login.php?login_attempt=1'
-        data = "locale=en_US&non_com_login=&email="+self.email+"&pass="+self.password+"&lsd=20TOl"
-        usock = self.opener.open('http://www.facebook.com')
-        usock = self.opener.open(url, data)
-        if "Logout" in usock.read():
-            print "Login successfully...\n"
-            a = usock.read()
+        data = "locale=en_US&non_com_login=&email="+self.admin_email+"&pass="+self.admin_pwd+"&lsd=20TOl"
+        response = self.opener.open('http://www.facebook.com')
+        response = self.opener.open(url, data)
+        if "Logout" in response.read():
+            print "Login successfully.\n"
+            a = response.read()
             if "logout" in a:
-                print "Login successfully...\n"
+                print "Login successfully.\n"
                 return a
         else:
-            print "Failed login"
-            print usock.read()
+            print "Failed login."
+            print response.read()
             sys.exit()
 
 if __name__ == '__main__':
-    fan_page_id = 57613404340
-    f = FacebookCrawler("samas0120@gmail.com", "xup6u4vu;6")
-    f.login()
-    url = 'https://www.facebook.com/browse/?type=page_fans&page_id=' + str(fan_page_id)
-    usock = f.opener.open(url)
-    content = usock.read()
-    soup_content = BeautifulSoup(content)
-    fans = soup_content.select('.uiProfileBlockContent')
-    print '\nFound ' + str(len(fans)) + ' fans.'
-    target_file = open('test_crawler.txt', 'w')
+    obj = FacebookCrawler()
+    obj.login()
+    url = 'https://www.facebook.com/browse/?type=page_fans&page_id=' + str(obj.fan_page_id)
+    response = obj.opener.open(url)
+    html = response.read()
+    soup = BeautifulSoup(html)
+    fans = soup.select('.uiProfileBlockContent')
+    print 'Found ' + str(len(fans)) + ' fans.'
+    target_file = open('../data/test_crawler.csv', 'w')
     for fan in fans:
         alink = fan.select('.fcb a')
         row = []
@@ -64,7 +66,7 @@ if __name__ == '__main__':
                 # row.append(user_profile + '/likes')
             target_file.write(','.join(row) + '\n')
     target_file.close()
-    next_page = soup_content.select('.morePager')
+    next_page = soup.select('.morePager')
     for link in next_page:
-        next_page_url = 'https://www.facebook.com' + link.find('div').find('a')['href'] + '&__user=100000597488537&__a=1&__rev=1552948'
+        next_page_url = 'https://www.facebook.com' + link.find('div').find('a')['href'] + '&__user=' + str(obj.admin_id) + '&__a=1&__rev=1552948'
     print '\nNext page url:\n' + next_page_url + '\n'

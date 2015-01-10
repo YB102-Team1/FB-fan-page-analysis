@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 # __author__ = 'Samas Lin<samas0120@gmail.com>'
 import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
@@ -6,29 +6,32 @@ from FacebookCrawler import FacebookCrawler
 
 class FansList(FacebookCrawler):
 
-    segment_size = 40
-    start_offset = 0
-    current_cursor = 0
-    last_offset = 20
-    target_file = 'fan_list_0.txt'
+    segment_size = 40                        # users in a segment
+    start_offset = 0                         # start offset of this segment
+    last_offset = 20                         # end offset of this segment
+    target_file = '../data/fan_list_0_0.csv' # file to save user list
 
-    def set_segment(self, segment_number):
+    def __init__(self, segment_number):
+
+        super(FansList, self).__init__()
         self.start_offset = (segment_number - 1) * self.segment_size
-        self.current_cursor = (segment_number - 1) * self.segment_size
         self.last_offset = segment_number * self.segment_size - 20
-        self.target_file = 'fan_list_' + str(segment_number) + '.txt'
+        self.target_file = '../data/fan_list_' + str(self.fan_page_id) + '_' + str(segment_number) + '.csv'
         target_file = open(self.target_file, 'w')
         target_file.write('')
         target_file.close()
+        self.login()
 
-    def crawl(self, url):
+    def crawl(self, page):
 
-        usock = self.opener.open(url)
-        content_list = usock.read().replace('for (;;);{"__ar":1,"payload":null,"domops":[["appendContent","^div.fbProfileBrowserListContainer",true,', '').split('}')
-        content = json.loads(content_list[0] + '}')['__html'].encode('utf-8')
-        soup_content = BeautifulSoup(content)
-        fans = soup_content.select('.uiProfileBlockContent')
-        sys.stdout.write('Getting fans ' + str(self.current_cursor) + '-' + str(self.current_cursor + 20) + ' ...')
+        start = self.start_offset + (page - 1) * 20
+        url = 'https://www.facebook.com/ajax/browser/list/page_fans/?dge=public_profile%3Afbpage_to_user&__user=100000597488537&__a=1&__rev=1552948&start=' + str(start) + '&page_id=' + str(self.fan_page_id)
+        response = self.opener.open(url)
+        json_content = response.read().replace('for (;;);{"__ar":1,"payload":null,"domops":[["appendContent","^div.fbProfileBrowserListContainer",true,', '').split('}')
+        html = json.loads(json_content[0] + '}')['__html'].encode('utf-8')
+        soup = BeautifulSoup(html)
+        fans = soup.select('.uiProfileBlockContent')
+        sys.stdout.write('Getting fans ' + str(start) + '-' + str(start + 20) + ' ...')
         target_file = open(self.target_file, 'a')
         for fan in fans:
             alink = fan.select('.fcb a')
@@ -46,26 +49,14 @@ class FansList(FacebookCrawler):
                     row.append(user_profile)
                 target_file.write(','.join(row) + '\n')
         target_file.close()
-        print 'done.'
-        self.current_cursor = self.current_cursor + 20
-        next_page = soup_content.select('.morePager')
-        if len(next_page) == 0 or self.current_cursor > self.last_offset:
-            print 'script ended.'
+        print 'done'
+        next_page = soup.select('.morePager')
+        if len(next_page) == 0 or start + 20 > self.last_offset:
+            print '\nScript ended.\n'
         else :
-            for link in next_page:
-                next_page_url = 'https://www.facebook.com' + link.find('div').find('a')['href'] + '&__user=100000597488537&__a=1&__rev=1552948'
-            self.crawl(next_page_url)
+            self.crawl(page + 1)
 
 if __name__ == '__main__':
-
     segment_number = 1
-    user_email = 'samas0120@gmail.com'
-    user_pwd = 'xup6u4vu;6'
-    fan_page_id = 57613404340
-
-    f = FansList(user_email, user_pwd)
-    f.set_segment(segment_number)
-
-    f.login()
-    url = 'https://www.facebook.com/ajax/browser/list/page_fans/?dge=public_profile%3Afbpage_to_user&start=0&__user=100000597488537&__a=1&__rev=1552948&page_id=' + str(fan_page_id)
-    f.crawl(url)
+    obj = FansList(segment_number)
+    obj.crawl(1)

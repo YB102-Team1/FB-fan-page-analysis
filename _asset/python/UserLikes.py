@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 # __author__ = 'Samas Lin<samas0120@gmail.com>'
 import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
@@ -6,19 +6,31 @@ from FacebookCrawler import FacebookCrawler
 
 class UserLikes(FacebookCrawler):
 
-    src_file = 'fan_list_0.txt'
-    target_file = 'fan_list_0.txt'
+    src_file = '../data/fan_list_0_0.csv'    # file to load user list
+    target_file = '../data/fan_list_0_0.csv' # file to save user likes list
 
-    def set_segment(self, segment_number):
-        self.src_file = 'fan_list_' + str(segment_number) + '.txt'
-        self.target_file = 'user_likes_' + str(segment_number) + '.txt'
+    def __init__(self, segment_number):
+
+        super(UserLikes, self).__init__()
+        self.src_file = '../data/fan_list_' + str(self.fan_page_id) + '_' + str(segment_number) + '.csv'
+        self.target_file = '../data/user_likes_' + str(self.fan_page_id) + '_' + str(segment_number) + '.csv'
         if not os.path.isfile(self.src_file):
             print self.src_file + ' not exists!'
             sys.exit()
-        else:
-            target_file = open(self.target_file, 'w')
-            target_file.write('')
-            target_file.close()
+        target_file = open(self.target_file, 'w')
+        target_file.write('')
+        target_file.close()
+        self.login()
+
+    def get_user_likes(self, user_id, page):
+
+        # codes start from here...
+        return
+
+    def get_user_music(self, user_id, page):
+
+        # codes start from here...
+        return
 
     def crawl(self):
 
@@ -35,32 +47,27 @@ class UserLikes(FacebookCrawler):
                 likes_url = user_profile_url + '/likes'
                 music_url = user_profile_url + '/music'
 
-            usock = f.opener.open(likes_url)
-            content = usock.read()
-            if 'https://www.facebook.com/images/profile/timeline/app_icons/likes_24.png' in content:
-                # codes strat from here...
-                print 'User ' + str(user_id) + ' likes page:\n' + likes_url + '\n'
-                # codes end at here...
+            response = self.opener.open(likes_url)
+            html = response.read()
+            if 'https://www.facebook.com/images/profile/timeline/app_icons/likes_24.png' in html:
+                sys.stdout.write('Getting user ' + str(user_id) + ' likes page...')
+                # parse first page
+                self.get_user_likes(user_id, 2)
+                print('done')
             else:
-                # codes strat from here...
-                usock = f.opener.open(music_url)
-                content = usock.read()
-                if 'https://www.facebook.com/images/profile/timeline/app_icons/music_24.png' in content:
-                    print 'User ' + str(user_id) + ' music page:\n' + music_url + '\n'
+                response = self.opener.open(music_url)
+                html = response.read()
+                if 'https://www.facebook.com/images/profile/timeline/app_icons/music_24.png' in html:
+                    sys.stdout.write('Getting user ' + str(user_id) + ' music page...')
+                    # parse first page
+                    self.get_user_music(user_id, 2)
+                    print('done')
                 else:
-                    print 'User ' + str(user_id) + ' is wicked.\n'
-                # codes end at here...
-
+                    print 'User ' + str(user_id) + ' is wicked.'
         src_file.close()
+        print '\nScript ended.\n'
 
 if __name__ == '__main__':
-
     segment_number = 1
-    user_email = 'samas0120@gmail.com'
-    user_pwd = 'xup6u4vu;6'
-
-    f = UserLikes(user_email, user_pwd)
-    f.set_segment(segment_number)
-
-    f.login()
-    f.crawl()
+    obj = UserLikes(segment_number)
+    obj.crawl()
