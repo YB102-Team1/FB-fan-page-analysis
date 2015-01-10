@@ -3,6 +3,9 @@
 import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
 
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 class FacebookCrawler(object):
 
     fan_page_id = 57613404340
@@ -28,10 +31,10 @@ class FacebookCrawler(object):
         response = self.opener.open('http://www.facebook.com')
         response = self.opener.open(url, data)
         if "Logout" in response.read():
-            print "Login successfully.\n"
+            print "Login successfully."
             a = response.read()
             if "logout" in a:
-                print "Login successfully.\n"
+                print "Login successfully."
                 return a
         else:
             print "Failed login."
@@ -49,7 +52,7 @@ if __name__ == '__main__':
     print 'Found ' + str(len(fans)) + ' fans.'
     target_file = open('../data/test_crawler.csv', 'w')
     for fan in fans:
-        alink = fan.select('.fcb a')
+        alink = fan.select('.fsl.fwb.fcb a')
         row = []
         for a in alink:
             user_fb_id = a.parent.parent.parent.parent.parent.parent.parent['id'].replace('adminableItem_', '')

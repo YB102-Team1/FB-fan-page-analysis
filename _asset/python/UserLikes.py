@@ -4,16 +4,19 @@ import urllib2, cookielib, re, os, sys, json
 from bs4 import BeautifulSoup
 from FacebookCrawler import FacebookCrawler
 
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 class UserLikes(FacebookCrawler):
 
-    src_file = '../data/fan_list_0_0.csv'    # file to load user list
-    target_file = '../data/fan_list_0_0.csv' # file to save user likes list
+    src_file = '../data/fan_list_0_00000.csv'    # file to load user list
+    target_file = '../data/fan_list_0_00000.csv' # file to save user likes list
 
     def __init__(self, segment_number):
 
         super(UserLikes, self).__init__()
-        self.src_file = '../data/fan_list_' + str(self.fan_page_id) + '_' + str(segment_number) + '.csv'
-        self.target_file = '../data/user_likes_' + str(self.fan_page_id) + '_' + str(segment_number) + '.csv'
+        self.src_file = '../data/fan_list_' + str(self.fan_page_id) + '_' + str('%05d' %segment_number) + '.csv'
+        self.target_file = '../data/user_likes_' + str(self.fan_page_id) + '_' + str('%05d' %segment_number) + '.csv'
         if not os.path.isfile(self.src_file):
             print self.src_file + ' not exists!'
             sys.exit()
@@ -22,7 +25,7 @@ class UserLikes(FacebookCrawler):
         target_file.close()
         self.login()
 
-    def get_list_first_page(self, html):
+    def get_list_first_page(self, user_id, html):
         page_list = '<ul class="' + html.split('<!-- <ul class="')[1].split('-->')[0]
         soup = BeautifulSoup(page_list)
         links = soup.select('.fsl a')
@@ -62,22 +65,22 @@ class UserLikes(FacebookCrawler):
             response = self.opener.open(likes_url)
             html = response.read()
             if 'https://www.facebook.com/images/profile/timeline/app_icons/likes_24.png' in html:
-                sys.stdout.write('Getting user ' + str(user_id) + ' likes page...')
-                self.get_list_first_page(html)
+                sys.stdout.write('\tGetting user ' + str(user_id) + ' likes page...')
+                self.get_list_first_page(user_id, html)
                 self.get_user_likes(user_id, 2)
                 print('done')
             else:
                 response = self.opener.open(music_url)
                 html = response.read()
                 if 'https://www.facebook.com/images/profile/timeline/app_icons/music_24.png' in html:
-                    sys.stdout.write('Getting user ' + str(user_id) + ' music page...')
-                    self.get_list_first_page(html)
+                    sys.stdout.write('\tGetting user ' + str(user_id) + ' music page...')
+                    self.get_list_first_page(user_id, html)
                     self.get_user_music(user_id, 2)
                     print('done')
                 else:
-                    print 'User ' + str(user_id) + ' is wicked.'
+                    print '\tUser ' + str(user_id) + ' is wicked.'
         src_file.close()
-        print '\nScript ended.\n'
+        print 'Script ended.\n'
 
 if __name__ == '__main__':
     segment_number = 1
