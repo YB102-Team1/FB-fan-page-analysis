@@ -1,4 +1,4 @@
-import socket  
+import socket
 # download http://sourceforge.net/projects/socksipy/
 import socks
 import httplib
@@ -6,19 +6,20 @@ import httplib
 def connectTor():
     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
     socket.socket = socks.socksocket
-    
+
 def main():
     connetTor():
-        
+
         conn = httplib.HTTPConnection("http://www.myipaddress.com/show-my-ip-address/")
         conn.request("GET","/")
  response = conn.getresponse()
-    
+
 if  __name__ == "__main__";
     main()
 
 # 洋蔥專用FB網址(沒開tor會連不上)
-# https://facebookcorewwwi.onion/	
+# https://facebookcorewwwi.onion/
+######################################################################################
 
 # Stem：a Python controller library for Tor(還沒研究)
 # https://stem.torproject.org/
@@ -39,6 +40,7 @@ s.set_proxy(socks.HTTP, "5.5.5.5", 8888)
 s.connect(("www.test.com", 80))
 s.sendall("GET / ...")
 print s.recv(4096)
+######################################################################################
 
 import socket
 import socks
@@ -50,9 +52,10 @@ socket.socket = socks.socksocket
 urllib2.urlopen("http://...") # All requests will pass through the SOCKS proxy
 
 proxy_support = urllib2.ProxyHandler({"http" : "127.0.0.1:8118"})
-    opener = urllib2.build_opener(proxy_support) 
+    opener = urllib2.build_opener(proxy_support)
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     print opener.open('http://www.google.com').read()
+######################################################################################
 
 import urllib2
 import httplib

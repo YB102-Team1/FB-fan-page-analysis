@@ -6,7 +6,7 @@ from FacebookCrawler import FacebookCrawler
 
 class FansList(FacebookCrawler):
 
-    segment_size = 40                        # users in a segment
+    segment_size = 1000                      # users in a segment
     start_offset = 0                         # start offset of this segment
     last_offset = 20                         # end offset of this segment
     target_file = '../data/fan_list_0_0.csv' # file to save user list
@@ -25,6 +25,7 @@ class FansList(FacebookCrawler):
     def crawl(self, page):
 
         start = self.start_offset + (page - 1) * 20
+        print 'Crawling user ' + str(self.start_offset) + '-' + str(self.last_offset + 20) + ':\n'
         url = 'https://www.facebook.com/ajax/browser/list/page_fans/?dge=public_profile%3Afbpage_to_user&__user=100000597488537&__a=1&__rev=1552948&start=' + str(start) + '&page_id=' + str(self.fan_page_id)
         response = self.opener.open(url)
         json_content = response.read().replace('for (;;);{"__ar":1,"payload":null,"domops":[["appendContent","^div.fbProfileBrowserListContainer",true,', '').split('}')
@@ -57,6 +58,7 @@ class FansList(FacebookCrawler):
             self.crawl(page + 1)
 
 if __name__ == '__main__':
-    segment_number = 1
-    obj = FansList(segment_number)
-    obj.crawl(1)
+    for segment_number in range(1, 10):
+        obj = FansList(segment_number)
+        obj.crawl(1)
+        del(obj)

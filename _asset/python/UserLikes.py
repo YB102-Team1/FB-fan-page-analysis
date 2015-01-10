@@ -83,3 +83,4 @@ if __name__ == '__main__':
     segment_number = 1
     obj = UserLikes(segment_number)
     obj.crawl()
+    del(obj)
