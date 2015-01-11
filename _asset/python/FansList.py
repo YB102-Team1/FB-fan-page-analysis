@@ -50,7 +50,7 @@ class FansList(FacebookCrawler):
                 else:
                     user_profile = a['href'].replace('?fref=pb&hc_location=profile_browser', '')
                     row.append(user_profile)
-                target_file.write(','.join(row) + '\n')
+                target_file.write(','.join(row).encode('utf-8') + '\n')
         target_file.close()
         print 'done'
         next_page = soup.select('.morePager')
@@ -60,7 +60,7 @@ class FansList(FacebookCrawler):
             self.crawl(page + 1)
 
 if __name__ == '__main__':
-    for segment_number in range(101, 601):
+    for segment_number in range(452, 601):
         obj = FansList(segment_number)
         print 'Crawling fans ' + str(obj.start_offset) + '-' + str(obj.last_offset + 19) + ':'
         obj.crawl(1)
