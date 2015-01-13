@@ -10,6 +10,7 @@ $link = new mysqli('localhost', 'team1', 'yb102', 'YB102_Team1');
 $file = @fopen('source.csv', "r");
 while (!feof($file)) {
     $data_string = fgets($file);
+    str_replace("\n", "", $data_string);
     $data_array = explode(',', $data_string);
     $column1 = $data_array[0];
     $column2 = $data_array[1];
@@ -29,6 +30,7 @@ for ($segment = 1; $segment <= 487; $segment++) {
     $file = @fopen($file_path, "r");
     while (!feof($file)) {
         $data_string = fgets($file);
+        str_replace("\n", "", $data_string);
         $data_array = explode(',', $data_string);
         $column1 = $data_array[0];
         $column2 = $data_array[1];
@@ -49,6 +51,7 @@ $test_table_god_obj = new TestTableGod();
 $file = @fopen('source.csv', "r");
 while (!feof($file)) {
     $data_string = fgets($file);
+    str_replace("\n", "", $data_string);
     $data_array = explode(',', $data_string);
     $column1 = $data_array[0];
     $column2 = $data_array[1];
@@ -72,6 +75,7 @@ for ($segment = 1; $segment <= 487; $segment++) {
     $file = @fopen($file_path, "r");
     while (!feof($file)) {
         $data_string = fgets($file);
+        str_replace("\n", "", $data_string);
         $data_array = explode(',', $data_string);
         $column1 = $data_array[0];
         $column2 = $data_array[1];

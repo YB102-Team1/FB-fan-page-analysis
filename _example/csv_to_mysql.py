@@ -19,7 +19,7 @@ conn = pymysql.connect(host='localhost', port=3306, user='team1', passwd='yb102'
 cur = conn.cursor()
 src_file = open('source.csv', 'r')
 for line in src_file.readlines():
-    data_list = line.split(',')
+    data_list = line.replace('\n', '').split(',')
     column1 = data_list[0]
     column2 = data_list[1]
     now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -41,7 +41,7 @@ for segment_number in range(1, 488):
     file_path = file_prefix + str('%05d' %segment_number) + '.csv'
     src_file = open(file_path, 'r')
     for line in src_file.readlines():
-        data_list = line.split(',')
+        data_list = line.replace('\n', '').split(',')
         column1 = data_list[0]
         column2 = data_list[1]
         now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
