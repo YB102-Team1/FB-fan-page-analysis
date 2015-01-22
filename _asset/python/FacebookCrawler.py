@@ -8,10 +8,10 @@ sys.setdefaultencoding("utf-8")
 
 class FacebookCrawler(object):
 
-    fan_page_id = 57613404340           # 八三夭粉絲團編號
-    admin_id = 100000597488537          # 管理員帳號編號
-    admin_email = 'samas0120@gmail.com' # 管理員帳號
-    admin_pwd = 'xup6u4vu;6'            # 管理員密碼
+    fan_page_id = 0  # 八三夭粉絲團編號
+    admin_id = 0     # 管理員帳號編號
+    admin_email = '' # 管理員帳號
+    admin_pwd = ''   # 管理員密碼
 
     def __init__(self):
 
@@ -24,6 +24,11 @@ class FacebookCrawler(object):
             # 偽裝這隻爬蟲其實是用 Firefox 在瀏覽網頁
             ('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 (.NET CLR 3.5.30729)')
         ]
+        import param
+        self.fan_page_id = param.fan_page_id
+        self.admin_id = param.admin_id
+        self.admin_email = param.admin_email
+        self.admin_pwd = param.admin_pwd
         self.opener = opener
 
     def login(self):
