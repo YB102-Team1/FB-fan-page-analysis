@@ -19,7 +19,7 @@ class FacebookCrawler(object):
         cj = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = [
-            ('Referer', 'http://login.facebook.com/login.php'),
+            ('Referer', 'http://www.facebook.com/login.php'),
             ('Content-Type', 'application/x-www-form-urlencoded'),
             # 偽裝這隻爬蟲其實是用 Firefox 在瀏覽網頁
             ('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 (.NET CLR 3.5.30729)')
@@ -96,3 +96,5 @@ if __name__ == '__main__':
         # 把找到的下一頁連結串成完整的網址
         next_page_url = 'https://www.facebook.com' + link.find('div').find('a')['href'] + '&__user=' + str(obj.admin_id) + '&__a=1&__rev=1552948'
     print '\nNext page url:\n' + next_page_url + '\n'
+else:
+    print __name__

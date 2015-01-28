@@ -90,7 +90,7 @@ class FansList(FacebookCrawler):
             self.crawl(page + 1)
 
 if __name__ == '__main__':
-    for segment_number in range(487, 601):
+    for segment_number in range(1, 601):
         obj = FansList(segment_number)
         print 'Crawling fans ' + str(obj.start_offset) + '-' + str(obj.last_offset + 19) + ':'
         obj.crawl(1)
