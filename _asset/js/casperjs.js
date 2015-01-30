@@ -3,11 +3,15 @@ var fs = require('fs');
 var casper = require('casper').create({
     verbose: false,
     logLevel: "debug",
-    // clientScripts: [ "js/jquery-1.10.2.min.js", "js/jquery-ui.min.js"],
+    viewportSize: {width: 800, height: 10000},
+    // clientScripts:  [
+    //     'includes/jquery.js',      // These two scripts will be injected in remote
+    //     'includes/underscore.js'   // DOM on every request
+    // ],
     pageSettings: {
         loadImages:  false,         // The WebPage instance used by Casper will
         loadPlugins: false,         // use these settings
-        userAgent: 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36'
+        userAgent: 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.7) Gecko/20091221 Firefox/3.5.7 (.NET CLR 3.5.30729)'
     }
 });
 
@@ -22,51 +26,21 @@ casper.on("page.error", function(msg, trace) {
 });
 
 casper.start("http://www.facebook.com/login.php", function() {
-    console.log("page loaded");
+    // console.log("page loaded");
     // this.test.assertExists('form#login_form', 'form is found');
     this.fill('form#login_form', {
         email: 'samas0120@gmail.com',
         pass:  'xup6u4vu;6'
     }, true);
-});
+}).thenOpen('http://www.facebook.com/samas.lin/likes', function() {
+    this.scrollToBottom();
+    this.wait(20000, function() {
 
-// casper.thenEvaluate(function(){
-//    console.log("Page Title " + document.title);
-//    console.log("Your name is " + document.querySelector('.headerTinymanName').textContent );
-// });
+        var html = this.getHTML();
+        // utils.dump(html);
+        var f = fs.open('result.html', 'w');
+        f.write(html);
+        f.close();
 
-casper.thenOpen('http://www.facebook.com/samas.lin/likes').then(function() {
-
-    var html = this.getHTML();
-    utils.dump(html);
-    var f = fs.open('result.html', 'w');
-    f.write(html);
-    f.close();
-
-    // window.setTimeout(function() {
-
-    //     window.setTimeout(function() {
-    //         var x = 0, h = 0;
-    //         function judge() {
-    //             console.log('judge...');
-    //             console.log(document.body.scrollHeight);
-    //             if (document.body.scrollHeight == h) {
-    //                 clearInterval(x);
-    //                 console.logÆ('end');
-    //                 phantom.exit();
-    //             }
-    //         }
-    //         function scroll() {
-    //             console.log('scroll');
-    //             h = document.body.scrollHeight;
-    //             window.scrollTo(0,h);
-    //             setTimeout(judge, 3000);
-    //         }
-    //         x = setInterval(scroll, 3100);
-    //     }, 3000);
-
-    // }, 3000);
-
-});
-
-casper.run();
+    });
+}).run();

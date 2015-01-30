@@ -89,6 +89,10 @@ class ModelHelper
 
             }// end foreach ($column_array as $column_name => $attribute)
 
+            if (!file_exists(CLASS_ROOT.'/model/')) {
+                mkdir(CLASS_ROOT.'/model/');
+            }
+
             return file_put_contents($class_path, str_replace('    #variables#'.PHP_EOL, $variable_list, $class_content));
 
         } else {// end if (!file_exists($class_path))
@@ -106,6 +110,10 @@ class ModelHelper
         $class_god_path = CLASS_ROOT.'/model/'.$class_name.'God.php';
 
         if (!file_exists($class_god_path)) {
+
+            if (!file_exists(CLASS_ROOT.'/model/')) {
+                mkdir(CLASS_ROOT.'/model/');
+            }
 
             $class_god_content = str_replace('Class', $class_name, file_get_contents(CLASS_GOD_TEMPLATE_FILE));
 
