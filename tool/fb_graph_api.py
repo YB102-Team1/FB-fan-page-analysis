@@ -1,22 +1,17 @@
+# -*- coding: utf-8 -*-
 #20150120 20150210
 #jhhuclaire@gmail.com
-# -*- coding: utf-8 -*-
 import requests
 import json
 from bs4 import BeautifulSoup
 
-ACCESS_TOKEN ="774167549319352|lIQ5s8d9JQaGwPcCQ8d3a_-UGwc"
-
+file00='appID.dat'
+ACCESS_TOKEN = open(file00,'r').readlines()[0].strip()
+print ACCESS_TOKEN
 fin01='user_likes_57613404340_1.csv'
 fout01='fan_page_info'+fin01
-
-#foutput01 = open('fansinfo.csv', 'w')
-#finput01 = open('user_likes_57613404340_1.csv','r')
-
 foutput01 = open(fout01, 'w')
 finput01 = open(fin01,'r')
-
-
 for line in finput01.readlines():
     info = line.strip().split(",")
     print info[1]
