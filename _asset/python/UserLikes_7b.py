@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 fan_page_id = '57613404340'
 
 #用for迴圈依序讀取csv檔 
-for n in range(0,487): #要讀取的csv的檔名
     page = n
     file_name = 'data/fan_list_' + fan_page_id + '_' + str('%05d' %page) + '.csv' #檔名     
     fans_file = open(file_name, 'r') #開啟csv檔
