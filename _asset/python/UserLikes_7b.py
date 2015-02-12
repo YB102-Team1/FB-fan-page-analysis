@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 fan_page_id = '57613404340'
 
 #用for迴圈依序讀取csv檔 
-    page = n
+for page in range(0,487): #要讀取的csv的檔名
     file_name = 'data/fan_list_' + fan_page_id + '_' + str('%05d' %page) + '.csv' #檔名     
     fans_file = open(file_name, 'r') #開啟csv檔
     fans_info = fans_file.readlines() #逐行讀取檔案，每行為一個字串
@@ -21,10 +21,10 @@ fan_page_id = '57613404340'
     
         res = requests.get(fans_add)
 #        print res
-        if res.status_code == 200:  #判斷網頁是否打得開，Response 200  //修改
+        if res.status_code == 200:  #判斷網頁是否打得開，Response 200  
 #            print 'y'
             user_id = fans_info[line][0:pos_1] #從csv檔裡取得user id
-            userlikes = open('userlikes_' + user_id + '.csv','a') #建立檔名為user id的csv檔
+            userlikes = open('user_likes_' + user_id + '.csv','a') #建立檔名為user id的csv檔
             sys.stdout.write(user_id + ' is processing...') 
             
             html = res.text.split('<!-- ')[4].split('-->')[0] #將包含likes內容的dom的註解刪除
