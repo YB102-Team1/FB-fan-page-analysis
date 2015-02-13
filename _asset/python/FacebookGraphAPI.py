@@ -20,7 +20,7 @@ file_input_list=open(file_input_user_likes_list,'r')
 ### 以下 for 迴圈，開始處理 list 裡面每一個檔案
 for user_likes_csv in file_input_list:
     print user_likes_csv
-    fan_page_info_file_output=open('fan_page_info'+user_likes_csv.strip(),'w')
+    fan_page_info_file_output = open('fan_page_info'+user_likes_csv.strip(),'w')
     #打開輸出檔案; 檔名為 "fan_page_info"＋輸入的 csv 檔名; 例如 fan_page_infouser_likes_57613404340_1.csv
     fans_like_id = open(user_likes_csv.strip(),'r')
     #打開並讀進user id and 粉絲團id
@@ -32,18 +32,18 @@ for user_likes_csv in file_input_list:
     for line in fans_like_id.readlines():
         info = line.strip().split(",")
         # csv 檔（user_likes_csv）裡的user id and 粉絲團id
-        base_url = 'https://graph.facebook.com/v2.2/%s'%info[1]
+        base_url = 'https://graph.facebook.com/v2.2/%s' %info[1]
         # info[1] = 粉絲團id  ( info[0] = user id)
-        url = '%s?fields=%s&access_token=%s'%(base_url, fields, ACCESS_TOKEN,)
+        url = base_url + '?fields=%s&access_token=%s' %(fields, ACCESS_TOKEN)
         # 結合 url 所有資訊
-        content = requests.get(url).json()
+        content = requests.get(url)
         # 取得網頁內容
         json_content = "[" + json.dumps(content, indent=1).decode("utf-8").strip() + "]"
         json_data = json.loads(json_content)
         # 整理取得的 json 內容
         #
         # 以下迴圈處理輸出格式; 每筆粉絲團資料輸出後換下一行 ; 若有缺資料直接‘逗號’
-        for attribute in json_data:       
+        for attribute in json_data:
             for field in fields_list:
                 if field == fields_list[len(fields_list)-1]:
                     try:

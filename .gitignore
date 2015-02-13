@@ -12,6 +12,7 @@
 *.zip
 *.pyc
 *.txt
+*.dat
 
 # OS generated files #
 ###################

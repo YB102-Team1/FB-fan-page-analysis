@@ -1,82 +1,66 @@
 # -*- coding:utf-8 -*-
-# __author__ = 'Samas Lin<samas0120@gmail.com>'
-import sys, os, requests
+import requests, sys
 from bs4 import BeautifulSoup
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
+fan_page_id = '57613404340'
 
-class UserLikes(object):
+#用for迴圈依序讀取csv檔
+for page in range(1,2): #要讀取的csv的檔名
+    file_name = '../data/fan_list_' + fan_page_id + '_' + str('%05d' %page) + '.csv' #檔名
+    result_file_name = '../data/user_likes_' + fan_page_id + '_' + str('%05d' %page) + '.csv'
 
-    fan_page_id = 0                                # 粉絲團編號
-    src_file = '../data/fan_list_0_00000.csv'      # 要讀取的檔案名稱
-    target_file = '../data/user_likes_0_00000.csv' # 要寫入的檔案名稱
+    result_file = open(result_file_name, 'w')
+    result_file.write('')
+    result_file.close()
 
-    def __init__(self, segment_number):
+    result_file = open(result_file_name, 'a')
 
-        # 讀取粉絲團編號
-        import param
-        self.fan_page_id = param.fan_page_id
-        # 設定要讀取的檔案名稱
-        self.src_file = '../data/fan_list_' + str(self.fan_page_id) + '_' + str('%05d' %segment_number) + '.csv'
-        # 設定要寫入的檔案名稱
-        self.target_file = '../data/user_likes_' + str(self.fan_page_id) + '_' + str('%05d' %segment_number) + '.csv'
-        # 如果要讀取的檔案不存在就終止程式
-        if not os.path.isfile(self.src_file):
-            print self.src_file + ' not exists!'
-            sys.exit()
-        # 先把要寫入的檔案清空
-        target_file = open(self.target_file, 'w')
-        target_file.write('')
-        target_file.close()
+    fans_file = open(file_name, 'r') #開啟csv檔
+    fans_info = fans_file.readlines() #逐行讀取檔案，每行為一個字串
 
-    def crawl(self):
+    #用for迴圈抓取每行粉絲的頁面網址
+    for line in range(0,len(fans_info)):
+        pos_1 = fans_info[line].find(',',0) #找到第一個逗點位置
+        pos_2 = fans_info[line].find(',',pos_1+1) #找到第二個逗點位置
+        fans_add = fans_info[line][pos_2+1:] #從第二個逗點後的字串為要抓取的網址
 
-        # 以讀取模式打開來源檔案
-        src_file = open(self.src_file, 'r')
-        # 讀取來源檔案裡的每一行
-        for line in src_file.readlines():
-            # 把每一行資料用 ',' 拆成 list
-            data = line.strip().split(',')
-            # list 的第一個元素是 user_id、第三個元素是使用者首頁網址
-            user_id = data[0]
-            user_profile_url = data[2]
+        res = requests.get(fans_add)
 
-            # 針對兩種不同類型的使用者首頁網址，「說讚的內容」頁的網址也會不一樣
-            if str(user_id) in user_profile_url:
-                likes_url = user_profile_url + '&sk=likes'
-            else:
-                likes_url = user_profile_url + '/likes'
+        if res.status_code == 200:  #判斷網頁是否打得開，Response 200
 
-            # 用 requests 打開網址
-            response = requests.get(likes_url);
-            # 把網頁原始檔讀成字串
-            html = response.content
-            # 如果網頁原始檔裡面有找到「最愛」就代表使用者有開放「說讚的內容」頁
-            if '<h4 class="uiHeaderTitle">最愛</h4>' in html:
+            user_id = fans_info[line][0:pos_1] #從csv檔裡取得user id
+            sys.stdout.write(user_id + ' is processing...')
+            html = res.text.split('<!-- ')[4].split('-->')[0] #將包含likes內容的dom的註解刪除
 
-                # 在螢幕上顯示目前處理進度（sys.stdout.write 跟 print 的差別在於前者不會換行）
-                sys.stdout.write('\tGetting user ' + str(user_id) + ' likes page...')
+            likes = BeautifulSoup(html)
 
-                fx = open('result' + user_id + '.html', 'w')
-                fx.write(html)
-                fx.close()
+            #user的頁面本身沒有粉絲頁的id，必須要進入粉絲頁裡抓取id。likes區塊分三部分mediaPageName、visible、hiddenItem、
+            likes_mediaPageName = likes.select('.mediaRowItem') #選取第一個部分的like
+            for page in likes_mediaPageName:
+                if 'l.facebook.com' not in page['href']:
+                    page_add = page['href'].split('/')
+                    page_id = page_add[len(page_add) - 1]
+                    result_file.write(user_id + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
 
-                # soup = BeautifulSoup(html)
-                # test = soup.select('.mediaPageName')
-                # print test
-                # for page_name in test:
-                #     print page_name
+            likes_visible = likes.select('.visible a') #選取第二個部分的like
+            for page in likes_visible:
+                if 'l.facebook.com' not in page['href']:
+                    page_add = page['href'].split('/')
+                    page_id = page_add[len(page_add) - 1]
+                    result_file.write(user_id + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
 
-                print('done')
-            else:
-                print '\tUser ' + str(user_id) + ' hide liks page!'
-        # 來源檔案內每筆資料都讀完以後把檔案關閉
-        src_file.close()
-        print 'Script ended.\n'
+            likes_hiddenItem = likes.select('.hiddenItem a') ##選取第三個部分的like
+            for page in likes_hiddenItem:
+                if 'l.facebook.com' not in page['href']:
+                    page_add = page['href'].split('/')
+                    page_id = page_add[len(page_add) - 1]
+                    result_file.write(user_id + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
 
-if __name__ == '__main__':
-    segment_number = 1
-    obj = UserLikes(segment_number)
-    obj.crawl()
-    del(obj)
+            print 'done'
+
+        else:
+            print "not found"
+
+
+    result_file.close()
+    fans_file.close()
