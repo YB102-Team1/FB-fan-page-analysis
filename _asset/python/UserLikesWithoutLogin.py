@@ -2,7 +2,8 @@
 import requests, sys
 from bs4 import BeautifulSoup
 
-fan_page_id = '57613404340'
+import param
+fan_page_id = param.fan_page_id
 
 #用for迴圈依序讀取csv檔
 for page in range(1,2): #要讀取的csv的檔名
@@ -37,24 +38,27 @@ for page in range(1,2): #要讀取的csv的檔名
             #user的頁面本身沒有粉絲頁的id，必須要進入粉絲頁裡抓取id。likes區塊分三部分mediaPageName、visible、hiddenItem、
             likes_mediaPageName = likes.select('.mediaRowItem') #選取第一個部分的like
             for page in likes_mediaPageName:
+                page_id = ''
                 if 'l.facebook.com' not in page['href']:
                     page_add = page['href'].split('/')
                     page_id = page_add[len(page_add) - 1]
-                    result_file.write(user_id + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+                result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
 
             likes_visible = likes.select('.visible a') #選取第二個部分的like
             for page in likes_visible:
+                page_id = ''
                 if 'l.facebook.com' not in page['href']:
                     page_add = page['href'].split('/')
                     page_id = page_add[len(page_add) - 1]
-                    result_file.write(user_id + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+                result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
 
             likes_hiddenItem = likes.select('.hiddenItem a') ##選取第三個部分的like
             for page in likes_hiddenItem:
+                page_id = ''
                 if 'l.facebook.com' not in page['href']:
                     page_add = page['href'].split('/')
                     page_id = page_add[len(page_add) - 1]
-                    result_file.write(user_id + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+                result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
 
             print 'done'
 
