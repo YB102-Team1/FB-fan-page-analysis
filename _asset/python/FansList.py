@@ -13,7 +13,7 @@ class FansList(FacebookCrawler):
     segment_size = 1000                          # 每個 segment（碎片，把粉絲以固定數量拆成好幾段碎片）裡面有幾個粉絲
     start_offset = 0                             # 這個 segment 的第一頁
     last_offset = 20                             # 這個 segment 的最後一頁
-    target_file = '../data/fan_list_0_00000.csv' # 這個 segment 的資料會寫入哪個檔案
+    target_file = '../data/fan_list/fan_list_0_00000.csv' # 這個 segment 的資料會寫入哪個檔案
 
     def __init__(self, segment_number):
 
@@ -24,7 +24,7 @@ class FansList(FacebookCrawler):
         # 設定這個 segment 的最後一頁
         self.last_offset = segment_number * self.segment_size - 20
         # 設定這個 segment 要寫入的檔案名稱
-        self.target_file = '../data/fan_list_' + str(self.fan_page_id) + '_' + str('%05d' %segment_number) + '.csv'
+        self.target_file = '../data/fan_list/fan_list_' + str(self.fan_page_id) + '_' + str('%05d' %segment_number) + '.csv'
         # 先把要寫入的檔案清空
         target_file = open(self.target_file, 'w')
         target_file.write('')

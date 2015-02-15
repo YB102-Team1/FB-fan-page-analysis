@@ -19,7 +19,7 @@ class UserLikesListMaker(object):
 
     def run(self, segment_limit):
 
-        source_file_prefix = '../data/user_likes_' + str(self.fan_page_id) + '_'
+        source_file_prefix = '../data/user_likes/user_likes_' + str(self.fan_page_id) + '_'
 
         target_file = open('../data/user_likes.list', 'r')
         result = target_file.read()

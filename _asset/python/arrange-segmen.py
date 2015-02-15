@@ -7,8 +7,8 @@ sys.setdefaultencoding("utf-8")
 def arrange_segment(file_prefix, segment_number):
 
 	sys.stdout.write('processing segment ' + str(segment_number) + '......')
-	source_file = '../data/' + file_prefix + '_' + '57613404340' + '_' + str('%05d' %segment_number) + '.csv'
-	target_file = '../data/' + file_prefix + '_' + '57613404340' + '_' + str('%05d' %(segment_number + 1))+ '.csv'
+	source_file = '../data/' + file_prefix + '/' + file_prefix + '_' + '57613404340' + '_' + str('%05d' %segment_number) + '.csv'
+	target_file = '../data/' + file_prefix + '/' + file_prefix + '_' + '57613404340' + '_' + str('%05d' %(segment_number + 1))+ '.csv'
 	temp_content = ''
 
 	input_file = open(source_file, 'r')
