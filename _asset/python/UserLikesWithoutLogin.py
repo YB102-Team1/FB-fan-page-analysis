@@ -6,9 +6,9 @@ import param
 fan_page_id = param.fan_page_id
 
 #用for迴圈依序讀取csv檔
-for page in range(1,2): #要讀取的csv的檔名
-    file_name = '../data/fan_list_' + fan_page_id + '_' + str('%05d' %page) + '.csv' #檔名
-    result_file_name = '../data/user_likes_' + fan_page_id + '_' + str('%05d' %page) + '.csv'
+for page in range(2,31): #要讀取的csv的檔名
+    file_name = '../data/fan_list_' + str(fan_page_id) + '_' + str('%05d' %page) + '.csv' #檔名
+    result_file_name = '../data/user_likes_' + str(fan_page_id) + '_' + str('%05d' %page) + '.csv'
 
     result_file = open(result_file_name, 'w')
     result_file.write('')
@@ -28,43 +28,50 @@ for page in range(1,2): #要讀取的csv的檔名
         res = requests.get(fans_add)
 
         if res.status_code == 200:  #判斷網頁是否打得開，Response 200
-
+                
             user_id = fans_info[line][0:pos_1] #從csv檔裡取得user id
             sys.stdout.write(user_id + ' is processing...')
-            html = res.text.split('<!-- ')[4].split('-->')[0] #將包含likes內容的dom的註解刪除
 
-            likes = BeautifulSoup(html)
+            soup = BeautifulSoup(res.content)
+            captcha = soup.select('#captcha')
+            if len(captcha) > 0 :
 
-            #user的頁面本身沒有粉絲頁的id，必須要進入粉絲頁裡抓取id。likes區塊分三部分mediaPageName、visible、hiddenItem、
-            likes_mediaPageName = likes.select('.mediaRowItem') #選取第一個部分的like
-            for page in likes_mediaPageName:
-                page_id = ''
-                if 'l.facebook.com' not in page['href']:
-                    page_add = page['href'].split('/')
-                    page_id = page_add[len(page_add) - 1]
-                result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+                print 'banned!'
 
-            likes_visible = likes.select('.visible a') #選取第二個部分的like
-            for page in likes_visible:
-                page_id = ''
-                if 'l.facebook.com' not in page['href']:
-                    page_add = page['href'].split('/')
-                    page_id = page_add[len(page_add) - 1]
-                result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+            else:
 
-            likes_hiddenItem = likes.select('.hiddenItem a') ##選取第三個部分的like
-            for page in likes_hiddenItem:
-                page_id = ''
-                if 'l.facebook.com' not in page['href']:
-                    page_add = page['href'].split('/')
-                    page_id = page_add[len(page_add) - 1]
-                result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+                html = res.text.split('<!-- ')[4].split('-->')[0] #將包含likes內容的dom的註解刪除
+                likes = BeautifulSoup(html)
 
-            print 'done'
+                #user的頁面本身沒有粉絲頁的id，必須要進入粉絲頁裡抓取id。likes區塊分三部分mediaPageName、visible、hiddenItem、
+                likes_mediaPageName = likes.select('.mediaRowItem') #選取第一個部分的like
+                for page in likes_mediaPageName:
+                    page_id = ''
+                    if 'l.facebook.com' not in page['href']:
+                        page_add = page['href'].split('/')
+                        page_id = page_add[len(page_add) - 1]
+                    result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+
+                likes_visible = likes.select('.visible a') #選取第二個部分的like
+                for page in likes_visible:
+                    page_id = ''
+                    if 'l.facebook.com' not in page['href']:
+                        page_add = page['href'].split('/')
+                        page_id = page_add[len(page_add) - 1]
+                    result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+
+                likes_hiddenItem = likes.select('.hiddenItem a') ##選取第三個部分的like
+                for page in likes_hiddenItem:
+                    page_id = ''
+                    if 'l.facebook.com' not in page['href']:
+                        page_add = page['href'].split('/')
+                        page_id = page_add[len(page_add) - 1]
+                    result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n') #將粉絲id及粉絲頁id寫進檔案裡
+
+                print 'done'
 
         else:
             print "not found"
-
 
     result_file.close()
     fans_file.close()
