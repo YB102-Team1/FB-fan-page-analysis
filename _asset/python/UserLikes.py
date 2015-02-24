@@ -34,6 +34,7 @@ class UserLikes(FacebookCrawler):
         self.login()
 
     def get_user_likes_first_page(self, user_id, html):
+
         # 找到點過讚的粉絲團清單的段落，去頭去尾取出要的部份
         page_list = '<ul class="' + html.split('<!-- <ul class="')[1].split('-->')[0]
         # 把取出的段落丟進 BeautifulSoup 函式，這樣才能使用 .select
@@ -52,13 +53,23 @@ class UserLikes(FacebookCrawler):
         target_file.close()
 
     def get_user_likes(self, user_id, html):
+
         collection_token = html.split('<script>bigPipe.beforePageletArrive("pagelet_timeline_app_collection_')[1].split('")</script>')[0]
-        cursor = ''
-        while :
+
+        cursor_code = html.split('"]],["Hovercard"],')[0]
+        cursor = cursor_code[cursor_code.rfind('"') + 1:]
+
+        while True:
             data_param = '{"collection_token":"' + collection_token + '","cursor":"' + cursor + '","tab_key":"likes","profile_id":' + user_id + ',"overview":false,"ftid":null,"order":null,"sk":"likes","importer_state":null}'
             target_url = 'https://www.facebook.com/ajax/pagelet/generic.php/LikesWithFollowCollectionPagelet?data=' + urllib2.quote(data_param) + '&__user=' + str(self.admin_id) + '&__a=1'
-            cursor = ''
-        return
+
+            response = self.opener.open(target_url)
+            html = response.read()
+            #get fan pages
+            #get new cursor
+
+            if '"TimelineAppCollection","enableContentLoader"' not in html:
+                break
 
     def crawl(self):
 
@@ -87,7 +98,7 @@ class UserLikes(FacebookCrawler):
                 # 在螢幕上顯示目前處理進度（sys.stdout.write 跟 print 的差別在於前者不會換行）
                 sys.stdout.write('\tGetting user ' + str(user_id) + ' likes page...')
                 # 為了判別使用者有沒有開放「說讚的內容」頁，其實已經讀取到分頁第一頁的內容了，不需要再開網址抓取
-                self.get_user_likes_first_page(user_id, html)
+                # self.get_user_likes_first_page(user_id, html)
                 if '"TimelineAppCollection","enableContentLoader"' in html:
                     # 分頁第二頁之後需要開網址抓取
                     self.get_user_likes(user_id, html)
