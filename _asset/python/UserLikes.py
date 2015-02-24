@@ -65,7 +65,13 @@ class UserLikes(FacebookCrawler):
 
             response = self.opener.open(target_url)
             html = response.read()
-            #get fan pages
+            j = json.loads(html.replace('for (;;);',''))
+            soup = BeautifulSoup(j['payload'])
+            links = soup.select('.fcb a')
+            for link in links:
+                page_id = json.loads(link['data-gt'])['engagement']['eng_tid'].encode('utf-8')
+                print page_id
+
            
             cursor_code = html.split('"]],["Hovercard"],')[0]
             cursor = cursor_code[cursor_code.rfind('"') + 1:]
