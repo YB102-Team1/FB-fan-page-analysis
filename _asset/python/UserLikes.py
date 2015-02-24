@@ -110,7 +110,7 @@ class UserLikes(FacebookCrawler):
                 # 在螢幕上顯示目前處理進度（sys.stdout.write 跟 print 的差別在於前者不會換行）
                 sys.stdout.write('\tGetting user ' + str(user_id) + ' likes page...')
                 # 為了判別使用者有沒有開放「說讚的內容」頁，其實已經讀取到分頁第一頁的內容了，不需要再開網址抓取
-                # self.get_user_likes_first_page(user_id, html)
+                self.get_user_likes_first_page(user_id, html)
                 if '"TimelineAppCollection","enableContentLoader"' in html:
                     # 分頁第二頁之後需要開網址抓取
                     self.get_user_likes(user_id, html)
@@ -122,7 +122,7 @@ class UserLikes(FacebookCrawler):
         print 'Script ended.\n'
 
 if __name__ == '__main__':
-    segment_number = 1
-    obj = UserLikes(segment_number)
-    obj.crawl()
-    del(obj)
+    for segment_number in range(x, y):
+        obj = UserLikes(segment_number)
+        obj.crawl()
+        del(obj)
