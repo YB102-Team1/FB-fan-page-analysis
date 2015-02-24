@@ -7,7 +7,7 @@ from FacebookCrawler import FacebookCrawler
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-# 為了不用重新再寫一次設定 cookie 和登入的程式，直接繼承 FansList
+# 為了不用重新再寫一次設定 cookie 和登入的程式，直接繼承 FacebookCrawler
 class FansList(FacebookCrawler):
 
     segment_size = 1000                          # 每個 segment（碎片，把粉絲以固定數量拆成好幾段碎片）裡面有幾個粉絲

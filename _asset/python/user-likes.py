@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
-import requests, sys, os
+import requests, sys, os, time, random
 from bs4 import BeautifulSoup
 
 import param
 fan_page_id = param.fan_page_id
 
 #用for迴圈依序讀取csv檔
-for page in range(1,2):
+for page in range(3,11):
 
     #存放使用者清單的檔案名稱
     input_file_name = '../data/fan_list/fan_list_' + str(fan_page_id) + '_' + str('%05d' %page) + '.csv'
@@ -22,8 +22,6 @@ for page in range(1,2):
     #以附加模式打開要寫入的檔案
     result_file = open(output_file_name, 'a')
 
-    #最後要寫回存放使用者清單的檔案的內容
-    input_file_result = ''
     #以讀取模式打開存放使用者清單的檔案
     input_file = open(input_file_name, 'r')
 
@@ -104,6 +102,7 @@ for page in range(1,2):
 
             #處理完該行後，連同處理狀態一起存回
             input_file_result = input_file_result + ','.join(fan_data) + '\n'
+            time.sleep(random.randrange(10,20))
 
     result_file.close()
     input_file.close()
