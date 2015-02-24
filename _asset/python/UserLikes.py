@@ -66,7 +66,9 @@ class UserLikes(FacebookCrawler):
             response = self.opener.open(target_url)
             html = response.read()
             #get fan pages
-            #get new cursor
+           
+            cursor_code = html.split('"]],["Hovercard"],')[0]
+            cursor = cursor_code[cursor_code.rfind('"') + 1:]
 
             if '"TimelineAppCollection","enableContentLoader"' not in html:
                 break
