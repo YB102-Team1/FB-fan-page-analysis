@@ -59,6 +59,8 @@ class UserLikes(FacebookCrawler):
         cursor_code = html.split('"]],["Hovercard"],')[0]
         cursor = cursor_code[cursor_code.rfind('"') + 1:]
 
+        # 打開要寫入的目標檔案
+        target_file = open(self.target_file, 'a')
         while True:
             data_param = '{"collection_token":"' + collection_token + '","cursor":"' + cursor + '","tab_key":"likes","profile_id":' + user_id + ',"overview":false,"ftid":null,"order":null,"sk":"likes","importer_state":null}'
             target_url = 'https://www.facebook.com/ajax/pagelet/generic.php/LikesWithFollowCollectionPagelet?data=' + urllib2.quote(data_param) + '&__user=' + str(self.admin_id) + '&__a=1'
@@ -70,14 +72,16 @@ class UserLikes(FacebookCrawler):
             links = soup.select('.fcb a')
             for link in links:
                 page_id = json.loads(link['data-gt'])['engagement']['eng_tid'].encode('utf-8')
-                print page_id
+                # 把使用者 id 跟粉絲團 id 當成一筆資料寫成一行
+                target_file.write(user_id + ',' + page_id + '\n')
 
-           
             cursor_code = html.split('"]],["Hovercard"],')[0]
             cursor = cursor_code[cursor_code.rfind('"') + 1:]
 
             if '"TimelineAppCollection","enableContentLoader"' not in html:
                 break
+        # 每個粉絲頁的資料都寫完以後把檔案關閉
+        target_file.close()
 
     def crawl(self):
 
