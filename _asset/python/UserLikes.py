@@ -65,7 +65,14 @@ class UserLikes(FacebookCrawler):
             data_param = '{"collection_token":"' + collection_token + '","cursor":"' + cursor + '","tab_key":"likes","profile_id":' + user_id + ',"overview":false,"ftid":null,"order":null,"sk":"likes","importer_state":null}'
             target_url = 'https://www.facebook.com/ajax/pagelet/generic.php/LikesWithFollowCollectionPagelet?data=' + urllib2.quote(data_param) + '&__user=' + str(self.admin_id) + '&__a=1'
 
-            response = self.opener.open(target_url)
+            while True:
+                try:
+                    response = self.opener.open(target_url)
+                except Exception, e:
+                    pass
+                else:
+                    break
+
             html = response.read()
             j = json.loads(html.replace('for (;;);',''))
             soup = BeautifulSoup(j['payload'])
