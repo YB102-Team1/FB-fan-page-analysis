@@ -152,6 +152,10 @@ class ModelHelper
 
         $sql_path = TABLE_SQL_ROOT.'/'.$table_name.'.sql';
 
+        if (!file_exists(TABLE_SQL_ROOT)) {
+            mkdir(TABLE_SQL_ROOT);
+        }
+
         $sql_content = str_replace('???', $table_name, file_get_contents(TABLE_SQL_TEMPLATE_FILE));
         $db_obj = new DatabaseAccess();
         $column_array = $db_obj->getTableColumns($table_name);
@@ -197,6 +201,10 @@ class ModelHelper
 
         $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
         $god_class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name))).'God';
+
+        if (!file_exists(DATA_SQL_ROOT)) {
+            mkdir(DATA_SQL_ROOT);
+        }
 
         $db_obj = new DatabaseAccess();
         $column_array = $db_obj->getTableColumns($table_name);

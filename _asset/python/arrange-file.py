@@ -29,5 +29,5 @@ def arrange_file(file_prefix, file_number):
     print('finished\n')
 
 if __name__ == '__main__':
-    for file_number in range(4,5):
+    for file_number in range(1,2):
         arrange_file('user_likes', file_number)

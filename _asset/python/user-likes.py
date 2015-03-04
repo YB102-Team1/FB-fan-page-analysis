@@ -5,8 +5,15 @@ from bs4 import BeautifulSoup
 import param
 fan_page_id = param.fan_page_id
 
+import requesocks
+session = requesocks.session()
+session.proxies = {
+    'http': 'socks5://127.0.0.1:9150',
+    'https': 'socks5://127.0.0.1:9150'
+}
+
 #用for迴圈依序讀取csv檔
-for page in range(3,11):
+for page in range(10,11):
 
     #存放使用者清單的檔案名稱
     input_file_name = '../data/fan_list/fan_list_' + str(fan_page_id) + '_' + str('%05d' %page) + '.csv'
@@ -25,6 +32,8 @@ for page in range(3,11):
     #以讀取模式打開存放使用者清單的檔案
     input_file = open(input_file_name, 'r')
 
+    print 'segment ' + str(page) + ' start:'
+
     #用for迴圈抓取每行資料
     for line in input_file.readlines():
 
@@ -39,7 +48,7 @@ for page in range(3,11):
         if fan_data[3] == 'pending':
 
             #用requests.get取得網頁內容
-            res = requests.get(fan_data[2])
+            res = requests.get(fan_data[2])#.replace('https://www.facebook.com', 'https://facebookcorewwwi.onion'))
 
             #判斷網頁是否打得開，Response 200代表成功
             if res.status_code == 200:
@@ -55,6 +64,7 @@ for page in range(3,11):
                 if len(captcha) > 0 :
 
                     print 'banned!'
+                    break
 
                 else:
 
@@ -91,23 +101,11 @@ for page in range(3,11):
                         result_file.write(user_id + ',' + page['href'] + ',' + page_id + '\n')
 
                     print 'done'
-                    #將狀態改為「done」
-                    fan_data[3] = 'done'
+                    # time.sleep(random.randrange(11,20))
 
             #Response 不是200代表使用者有設定隱私無法讀取
             else:
                 print "not found"
-                #將狀態改為「hidden」
-                fan_data[3] = 'hiden'
-
-            #處理完該行後，連同處理狀態一起存回
-            input_file_result = input_file_result + ','.join(fan_data) + '\n'
-            time.sleep(random.randrange(10,20))
 
     result_file.close()
     input_file.close()
-
-    #將暫存的檔案內容寫回存放使用者清單的檔案
-    record_file = open(input_file_name, 'w')
-    record_file.write(input_file_result)
-    record_file.close()
