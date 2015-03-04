@@ -152,6 +152,10 @@ class ModelHelper
 
         $sql_path = TABLE_SQL_ROOT.'/'.$table_name.'.sql';
 
+        if (!file_exists('/_asset/sql/')) {
+            mkdir('/_asset/sql/');
+        }
+
         if (!file_exists(TABLE_SQL_ROOT)) {
             mkdir(TABLE_SQL_ROOT);
         }
@@ -201,6 +205,10 @@ class ModelHelper
 
         $sql_path = DATA_SQL_ROOT.'/'.$table_name.'.sql';
         $god_class_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name))).'God';
+
+        if (!file_exists('/_asset/sql/')) {
+            mkdir('/_asset/sql/');
+        }
 
         if (!file_exists(DATA_SQL_ROOT)) {
             mkdir(DATA_SQL_ROOT);
