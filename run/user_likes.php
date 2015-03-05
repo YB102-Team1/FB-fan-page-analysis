@@ -5,7 +5,7 @@ function user_likes($start = 0, $end = 0) {
     $link->query("SET NAMES UTF8");
     for ($segment = $start; $segment <= $end; $segment++) {
         echo $segment.'<br>';
-        $file_path = $_SERVER['DOCUMENT_ROOT'].'/_asset/data/user_likes/'.$file_prefix.sprintf('%05d', $segment).'.csv';
+        $file_path = $_SERVER['DOCUMENT_ROOT'].'/_asset/data/user_likes/purified/'.$file_prefix.sprintf('%05d', $segment).'.csv';
         $file = @fopen($file_path, "r");
         while (!feof($file)) {
             $data_string = fgets($file);
