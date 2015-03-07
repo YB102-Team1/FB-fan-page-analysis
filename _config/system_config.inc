@@ -2,6 +2,9 @@
 // time zone setting
 date_default_timezone_set('Asia/Taipei');
 
+//exceute time
+set_time_limit(0);
+
 // error handle
 ini_set('display_errors', 1);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
