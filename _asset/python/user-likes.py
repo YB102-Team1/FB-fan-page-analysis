@@ -11,7 +11,7 @@ session.proxies = {
     'http': 'socks5://127.0.0.1:9150',
     'https': 'socks5://127.0.0.1:9150'
 }
-cookies = dict(datr='AW76VHI0KTVKEK2Zq9kcCKTG')
+cookies = dict(datr='HMb6VD_Vs0pRocytLmKNBQw6')
 headers = {
     'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.3.18 (KHTML, like Gecko) Version/8.0.3 Safari/600.3.18',
     'DNT':'1',
@@ -20,7 +20,7 @@ headers = {
 }
 
 #用for迴圈依序讀取csv檔
-for page in range(13,14):
+for page in range(14,15):
 
     #存放使用者清單的檔案名稱
     input_file_name = '../data/fan_list/fan_list_' + str(fan_page_id) + '_' + str('%05d' %page) + '.csv'
