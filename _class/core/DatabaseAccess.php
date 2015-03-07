@@ -88,6 +88,22 @@ class DatabaseAccess
 
    }// end function getTableLastModifyTime
 
+   public function getTableMaxId($table_name)
+   {
+
+      $sql = "SELECT MAX(id) max_id FROM $table_name LIMIT 1";
+      $query_instance = $this->link->query($sql);
+
+      foreach ($query_instance as $instance_data) {
+
+         $max_id = $instance_data['max_id'];
+
+      }// end foreach ($query_instance as $instance_data)
+
+      return $max_id;
+
+   }// end function getTableMaxId
+
    public function insert($sql)
    {
 

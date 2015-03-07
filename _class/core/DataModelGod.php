@@ -27,6 +27,15 @@ abstract class DataModelGod
 
     }// end function getAll
 
+    public function getData($start=0, $length=1)
+    {
+
+        $sql = "SELECT * FROM $this->table_name LIMIT $start, $length";
+
+        return $this->db_obj->select($sql);
+
+    }// end function getData
+
     public function getDataCount()
     {
 

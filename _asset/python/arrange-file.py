@@ -29,8 +29,11 @@ def arrange_file(file_prefix, file_number):
     print('finished\n')
 
 if __name__ == '__main__':
-    for file_number in range(1, 488):
-        arrange_file('fan_list', file_number)
+    # for file_number in range(1, 488):
+    #     arrange_file('fan_list', file_number)
+
+    for file_number in range(1, 14):
+        arrange_file('user_likes', file_number)
 
     # for file_number in range(81,83):
     #     arrange_file('user_likes', file_number)
@@ -38,11 +41,9 @@ if __name__ == '__main__':
     # for file_number in range(161,163):
     #     arrange_file('user_likes', file_number)
 
-    # for file_number in range(241,242):
-    #     arrange_file('user_likes', file_number)
+    # arrange_file('user_likes', 241)
 
-    # for file_number in range(321,322):
-    #     arrange_file('user_likes', file_number)
+    # arrange_file('user_likes', 321)
 
     # for file_number in range(401,403):
     #     arrange_file('user_likes', file_number)
