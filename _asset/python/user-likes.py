@@ -20,7 +20,7 @@ headers = {
 }
 
 #用for迴圈依序讀取csv檔
-for page in range(164,165):
+for page in range(14,15):
 
     #存放使用者清單的檔案名稱
     input_file_name = '../data/fan_list/fan_list_' + str(fan_page_id) + '_' + str('%05d' %page) + '.csv'
